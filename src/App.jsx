@@ -652,7 +652,7 @@ function App() {
           <a href="#stadiums" onClick={(e) => { e.preventDefault(); setCurrentPage('matches'); }}>경기장 목록</a>
         </div>
         <p className="copyright">
-          © 2026 FIFA World Cup Landing Page. Powered by React & Vite. All rights reserved.
+          © 2026 FIFA World Cup Landing Page. Powered by React & Vite. All rights reserved. ✅ 배포 테스트 성공!
         </p>
       </footer>
     </div>
