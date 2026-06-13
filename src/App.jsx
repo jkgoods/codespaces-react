@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import ANALYSIS_DATA from './analysisData.json';
+
 
 // SVG Icons
 const CalendarIcon = () => (
@@ -130,63 +132,7 @@ const STADIUM_TIMEZONE_OFFSETS = {
   "16": -7  // Los Angeles (PDT, UTC-7)
 };
 
-// 당일 2경기의 AI 정밀 분석 데이터 (API의 id 3, 4번에 대응)
-const ANALYSIS_DATA = {
-  3: {
-    matchupName: '캐나다 vs 보스니아 헤르체고비나',
-    stadiumInfo: '오늘 새벽 04:00 - Toronto Stadium',
-    winRate: { teamA: 45, draw: 30, teamB: 25 },
-    teamAInfo: 'FIFA 랭킹: 49위 (개최국)',
-    teamBInfo: 'FIFA 랭킹: 74위',
-    recentForm: {
-      teamA: ['win', 'win', 'draw', 'loss', 'win'],
-      teamB: ['loss', 'draw', 'win', 'loss', 'draw']
-    },
-    recentFormDesc: {
-      teamA: '캐나다는 개최국의 이점을 안고 최근 5경기 3승 1무 1패로 상승세를 탔으나, 이번 경기에서 보스니아의 효율적인 역습에 다소 고전했습니다.',
-      teamB: '보스니아 헤르체고비나는 객관적인 전력 열세에도 불구하고, 수비 조직력을 탄탄히 다지며 역습 위주의 전술로 무승부를 이끌어냈습니다.'
-    },
-    tactics: {
-      teamA: '캐나다 (4-3-3): 알폰소 데이비스의 폭발적인 왼쪽 측면 오버랩과 래린의 박스 안 침투를 위주로 점유율을 62%까지 가져가며 공세를 펼쳤습니다.',
-      teamB: '보스니아 (5-4-1): 낮은 수비 라인 블록을 유지하다가, 탈취 후 롱볼을 통해 루키치의 피지컬을 활용한 심플하고 빠른 역습 루트를 공략했습니다.'
-    },
-    keyMatchups: [
-      { playerA: '알폰소 데이비스 (DF)', teamA: '바이에른 뮌헨', playerB: '아마르 데디치 (DF)', teamB: '레드불 잘츠부르크', desc: '측면 스피드 레이스: 데이비스의 침투를 데디치가 거친 대인 방어로 밀착 마크하며 캐나다의 주 공격 루트를 제어하려 노력했습니다.' },
-      { playerA: '사일 래린 (FW)', teamA: '마요르카', playerB: '데니스 하지카두니치 (DF)', teamB: '함부르크', desc: '박스 안 힘 싸움: 제공권이 좋은 하지카두니치가 래린을 꽁꽁 묶었으나, 후반 한순간 집중력이 무너지며 래린에게 동점 헤더골을 헌납했습니다.' }
-    ],
-    verdict: {
-      predictedScore: '최종 결과: 캐나다 1 - 1 보스니아 헤르체고비나 (경기 종료)',
-      desc: '경기 초반 보스니아의 역습이 적중하여 루키치가 선제골을 터뜨렸습니다. 캐나다는 시종일관 파상공세를 퍼부었으나 골 결정력 부족에 시달리다 후반 78분 사일 래린의 헤더 동점골로 겨우 승점 1점을 챙겼습니다. 예측했던 캐나다의 우세보다 보스니아의 수비 집중력이 돋보인 한 판이었습니다.'
-    }
-  },
-  4: {
-    matchupName: '미국 vs 파라과이',
-    stadiumInfo: '오늘 오전 10:00 - SoFi Stadium',
-    winRate: { teamA: 55, draw: 25, teamB: 20 },
-    teamAInfo: 'FIFA 랭킹: 11위 (개최국)',
-    teamBInfo: 'FIFA 랭킹: 56위',
-    recentForm: {
-      teamA: ['win', 'loss', 'win', 'win', 'draw'],
-      teamB: ['draw', 'win', 'loss', 'draw', 'loss']
-    },
-    recentFormDesc: {
-      teamA: '미국은 풀리식, 맥케니 등 유럽파 핵심 자원들이 최상의 폼을 유지하고 있으며, 최근 5경기에서 평균 2.3골을 터뜨리는 파괴력을 보여주고 있습니다.',
-      teamB: '파라과이는 견고한 수비에 비해 공격 전개 시 창의성 부족으로 어려움을 겪고 있습니다. 최근 5경기에서 단 3골에 그치는 빈공에 허덕입니다.'
-    },
-    tactics: {
-      teamA: '미국 (4-2-3-1): 무사-맥케니-아담스로 구성된 중원의 에너지 레벨을 바탕으로 전방 압박을 감행하고, 풀리식의 하프스페이스 컷인 플레이를 노립니다.',
-      teamB: '파라과이 (4-4-2): 미디엄 블록을 형성하고 컴팩트한 간격을 유지하며, 알미론의 개인 능력과 측면 역습 크로스에 의한 세컨볼 득점을 겨냥합니다.'
-    },
-    keyMatchups: [
-      { playerA: '크리스천 풀리식 (FW)', teamA: 'AC 밀란', playerB: '구스타보 고메스 (DF)', teamB: '팔메이라스', desc: '에이스의 격돌: 풀리식의 변칙적인 안쪽 돌파와 파라과이 수비의 리더 고메스의 커버 범위 및 몸싸움 대결이 승부의 최대 분수령입니다.' },
-      { playerA: '안토니 로빈슨 (DF)', teamA: '풀럼', playerB: '미겔 알미론 (MF)', teamB: '뉴캐슬', desc: '프리미어리거 윙 매치: 로빈슨의 활발한 오버래핑이 파라과이 역습의 핵 알미론을 얼마나 수비적으로 묶어둘 수 있을지가 핵심 열쇠입니다.' }
-    ],
-    verdict: {
-      predictedScore: '예상 스코어: 미국 2 - 1 파라과이 승리 예측',
-      desc: '미국이 강력한 홈 이점과 선수진의 기술적 우위를 앞세워 경기 주도권을 쥘 것입니다. 파라과이의 끈질긴 수비에 고전할 수 있으나 후반 조커 투입과 풀리식의 개인 전술을 통해 2:1 승리를 거둘 것으로 전망됩니다.'
-    }
-  }
-};
+
 
 function App() {
   const [currentPage, setCurrentPage] = useState('matches'); // 'matches' | 'lotto'
