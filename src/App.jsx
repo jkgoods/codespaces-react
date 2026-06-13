@@ -193,6 +193,7 @@ function App() {
   const [activeFilter, setActiveFilter] = useState('TODAY');
   const [lottoGames, setLottoGames] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isStreamDropdownOpen, setIsStreamDropdownOpen] = useState(false);
   
   // API 및 실시간 상태 관리
   const [apiMatches, setApiMatches] = useState([]);
@@ -207,6 +208,17 @@ function App() {
       setCurrentTime(new Date());
     }, 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // 드롭다운 외부 클릭 시 닫기
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (!e.target.closest('.live-btn-container')) {
+        setIsStreamDropdownOpen(false);
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => document.removeEventListener('click', handleOutsideClick);
   }, []);
 
   // 월드컵 공식 실시간 API 연동 (1분 간격 갱신)
@@ -460,10 +472,28 @@ function App() {
             </li>
           </ul>
         </nav>
-        <button className="live-btn">
-          <span className="pulse-dot"></span>
-          실시간 스트림
-        </button>
+        <div className="live-btn-container" style={{ position: 'relative' }}>
+          <button className="live-btn" onClick={() => setIsStreamDropdownOpen(!isStreamDropdownOpen)}>
+            <span className="pulse-dot"></span>
+            실시간 중계 보기
+          </button>
+          {isStreamDropdownOpen && (
+            <div className="stream-dropdown">
+              <a href="https://sports.news.naver.com" target="_blank" rel="noopener noreferrer" className="stream-dropdown-item">
+                ⚽ 네이버 스포츠
+              </a>
+              <a href="https://chzzk.naver.com" target="_blank" rel="noopener noreferrer" className="stream-dropdown-item">
+                🎮 네이버 치지직
+              </a>
+              <a href="https://onair.jtbc.co.kr" target="_blank" rel="noopener noreferrer" className="stream-dropdown-item">
+                📺 JTBC 온에어
+              </a>
+              <a href="https://www.sooplive.co.kr" target="_blank" rel="noopener noreferrer" className="stream-dropdown-item">
+                📡 SOOP (아프리카TV)
+              </a>
+            </div>
+          )}
+        </div>
       </header>
 
       {/* Conditional Page Rendering */}

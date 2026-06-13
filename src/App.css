@@ -1255,3 +1255,54 @@
   margin-bottom: 0.15rem;
   text-transform: uppercase;
 }
+
+/* Stream Dropdown Menu Styles */
+.stream-dropdown {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  padding: 0.6rem;
+  min-width: 200px;
+  z-index: 1000;
+  animation: slideInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stream-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: var(--transition-smooth);
+  text-decoration: none;
+}
+
+.stream-dropdown-item:hover {
+  background: rgba(0, 240, 255, 0.1);
+  color: var(--accent-cyan);
+}
+
+@keyframes slideInUp {
+  0% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
