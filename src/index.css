@@ -1,19 +1,19 @@
 :root {
-  --bg-primary: #20242c;
-  --bg-secondary: #2b303c;
-  --bg-tertiary: #3b4252;
-  --accent-neon: #8fbcbb; /* Soft Mint/Frost */
-  --accent-cyan: #88c0d0; /* Soft Cyan */
-  --accent-gold: #ebcb8b; /* Soft Gold/Yellow */
-  --accent-crimson: #bf616a; /* Soft Coral/Red */
-  --text-primary: #eceff4; /* Soft White */
-  --text-secondary: #d8dee9; /* Soft Gray */
-  --text-muted: #81a1c1; /* Muted Slate Blue */
+  --bg-primary: #0d111a;
+  --bg-secondary: #161a23;
+  --bg-tertiary: #222733;
+  --accent-neon: #2ec4b6; /* Muted Teal Mint */
+  --accent-cyan: #63b3ed; /* Soft Pastel Blue */
+  --accent-gold: #e9c46a; /* Warm Sand Gold */
+  --accent-crimson: #e76f51; /* Toned-down Terracotta */
+  --text-primary: #e2e8f0; /* Soft Off-White */
+  --text-secondary: #94a3b8; /* Comfortable Gray */
+  --text-muted: #64748b; /* Muted Dark Gray */
   --font-title: 'Outfit', 'Inter', sans-serif;
   --font-body: 'Inter', sans-serif;
-  --glass-bg: rgba(32, 36, 44, 0.75);
-  --glass-border: rgba(236, 239, 244, 0.08);
-  --glass-shadow: rgba(0, 0, 0, 0.3);
+  --glass-bg: rgba(13, 17, 26, 0.8);
+  --glass-border: rgba(226, 232, 240, 0.08);
+  --glass-shadow: rgba(0, 0, 0, 0.4);
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
