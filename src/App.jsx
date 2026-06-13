@@ -780,20 +780,20 @@ function App() {
               <p className="section-desc" style={{ marginTop: '0.5rem' }}>빅데이터 기반 전력 및 승률 실시간 분석</p>
             </div>
 
-            {/* Analysis Selector Tabs */}
-            <div className="analysis-tabs">
-              <button 
-                className={`analysis-tab-btn ${selectedAnalysisMatchId === 3 ? 'active' : ''}`}
-                onClick={() => setSelectedAnalysisMatchId(3)}
-              >
-                🇨🇦 캐나다 vs 보스니아 🇧🇦
-              </button>
-              <button 
-                className={`analysis-tab-btn ${selectedAnalysisMatchId === 4 ? 'active' : ''}`}
-                onClick={() => setSelectedAnalysisMatchId(4)}
-              >
-                🇺🇸 미국 vs 파라과이 🇵🇾
-              </button>
+            {/* Analysis Selector Tabs (동적 생성) */}
+            <div className="analysis-tabs" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
+              {processedMatches
+                .filter(match => match.hasAnalysis)
+                .map(match => (
+                  <button 
+                    key={match.id}
+                    className={`analysis-tab-btn ${selectedAnalysisMatchId === match.id ? 'active' : ''}`}
+                    onClick={() => setSelectedAnalysisMatchId(match.id)}
+                  >
+                    {match.teamA.flag} {match.teamA.name} vs {match.teamB.name} {match.teamB.flag}
+                  </button>
+                ))
+              }
             </div>
 
             {activeAnalysis && (
