@@ -202,6 +202,39 @@ function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedAnalysisMatchId, setSelectedAnalysisMatchId] = useState(4); // 기본값: 미국 vs 파라과이 (id: 4)
 
+  // 방문자 수 카운터 상태 관리
+  const [visitorCount, setVisitorCount] = useState(null);
+
+  // 방문자 카운트 API 연동 (중복 카운트 방지 위해 sessionStorage 활용)
+  useEffect(() => {
+    const hasVisited = sessionStorage.getItem('has_visited_worldcup2026');
+    const KEY = 'worldcup2026-react-visitor-count-unique-key-jkgoods';
+    const BASE_URL = 'https://countapi.mileshilliard.com/api/v1';
+
+    if (!hasVisited) {
+      // 해당 브라우저 세션에서 첫 방문 시 hit API 호출 (카운트 +1)
+      fetch(`${BASE_URL}/hit/${KEY}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && typeof data.value === 'number') {
+            setVisitorCount(data.value);
+            sessionStorage.setItem('has_visited_worldcup2026', 'true');
+          }
+        })
+        .catch(err => console.error("Counter API (hit) Error:", err));
+    } else {
+      // 이미 세션에 방문 기록이 있으면 get API 호출 (카운트 유지)
+      fetch(`${BASE_URL}/get/${KEY}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && typeof data.value === 'number') {
+            setVisitorCount(data.value);
+          }
+        })
+        .catch(err => console.error("Counter API (get) Error:", err));
+    }
+  }, []);
+
   // 1초 단위 실시간 시각 동기화
   useEffect(() => {
     const timer = setInterval(() => {
@@ -1187,6 +1220,44 @@ function App() {
           <a href="#lotto" onClick={(e) => { e.preventDefault(); setCurrentPage('lotto'); }}>로또번호생성</a>
           <a href="#stadiums" onClick={(e) => { e.preventDefault(); setCurrentPage('matches'); }}>경기장 목록</a>
         </div>
+
+        {/* 방문자 수 카운터 */}
+        {visitorCount !== null && (
+          <div className="visitor-counter-wrapper" style={{
+            margin: '0 auto 1.5rem auto',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.6rem',
+            padding: '0.4rem 1.2rem',
+            background: 'var(--bg-tertiary)',
+            border: '1px solid var(--glass-border)',
+            borderRadius: '50px',
+            fontSize: '0.85rem',
+            color: 'var(--text-secondary)',
+            boxShadow: '0 4px 12px var(--glass-shadow)',
+            transition: 'var(--transition-smooth)'
+          }}>
+            <span style={{ 
+              width: '8px', 
+              height: '8px', 
+              borderRadius: '50%', 
+              backgroundColor: 'var(--accent-neon)',
+              boxShadow: '0 0 8px var(--accent-neon)',
+              display: 'inline-block'
+            }}></span>
+            <span>방문자 수</span>
+            <span style={{ color: 'var(--text-muted)' }}>|</span>
+            <strong style={{ 
+              color: 'var(--accent-cyan)', 
+              fontWeight: '700',
+              textShadow: '0 0 6px rgba(99, 179, 237, 0.4)'
+            }}>
+              {visitorCount.toLocaleString()}
+            </strong>
+            <span>명</span>
+          </div>
+        )}
+
         <p className="copyright">
           © 2026 FIFA World Cup Landing Page. Powered by React & Vite. All rights reserved.
         </p>
