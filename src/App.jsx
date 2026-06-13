@@ -386,14 +386,16 @@ function App() {
 
   const todayStr = getFormattedDateString(currentTime);
 
-  // 필터링 적용된 매치 목록
-  const filteredMatches = processedMatches.filter(match => {
-    const matchDateStr = getFormattedDateString(match.kickoffTime);
-    if (activeFilter === 'ALL') return true;
-    if (activeFilter === 'LIVE') return match.status === 'LIVE';
-    if (activeFilter === 'TODAY') return matchDateStr === todayStr;
-    return matchDateStr === activeFilter;
-  });
+  // 필터링 적용된 매치 목록 (시간순으로 정렬)
+  const filteredMatches = processedMatches
+    .filter(match => {
+      const matchDateStr = getFormattedDateString(match.kickoffTime);
+      if (activeFilter === 'ALL') return true;
+      if (activeFilter === 'LIVE') return match.status === 'LIVE';
+      if (activeFilter === 'TODAY') return matchDateStr === todayStr;
+      return matchDateStr === activeFilter;
+    })
+    .sort((a, b) => a.kickoffTime - b.kickoffTime);
 
   // 경기들이 열리는 고유한 날짜 목록 추출
   const dateList = [...new Set(processedMatches.map(m => getFormattedDateString(m.kickoffTime)))].filter(Boolean).sort();
