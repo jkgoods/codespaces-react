@@ -1,19 +1,19 @@
 :root {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --accent-neon: #10b981;
-  --accent-cyan: #06b6d4;
-  --accent-gold: #fbbf24;
-  --accent-crimson: #f43f5e;
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
+  --bg-primary: #20242c;
+  --bg-secondary: #2b303c;
+  --bg-tertiary: #3b4252;
+  --accent-neon: #8fbcbb; /* Soft Mint/Frost */
+  --accent-cyan: #88c0d0; /* Soft Cyan */
+  --accent-gold: #ebcb8b; /* Soft Gold/Yellow */
+  --accent-crimson: #bf616a; /* Soft Coral/Red */
+  --text-primary: #eceff4; /* Soft White */
+  --text-secondary: #d8dee9; /* Soft Gray */
+  --text-muted: #81a1c1; /* Muted Slate Blue */
   --font-title: 'Outfit', 'Inter', sans-serif;
   --font-body: 'Inter', sans-serif;
-  --glass-bg: rgba(30, 41, 59, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-shadow: rgba(0, 0, 0, 0.25);
+  --glass-bg: rgba(32, 36, 44, 0.75);
+  --glass-border: rgba(236, 239, 244, 0.08);
+  --glass-shadow: rgba(0, 0, 0, 0.3);
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
