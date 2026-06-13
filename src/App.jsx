@@ -291,6 +291,7 @@ function App() {
         if (groupsData && groupsData.groups) {
           setGroupsData(groupsData.groups);
         }
+        setError(null);
         setIsLoading(false);
       } catch (err) {
         console.error("API Fetch Error:", err);
@@ -780,13 +781,19 @@ function App() {
               <span className="pulse-dot" style={{ display: 'inline-block', marginRight: '0.5rem' }}></span>
               실시간 데이터를 가져오는 중입니다...
             </div>
-          ) : error ? (
+          ) : error && groupsData.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--accent-crimson)', border: '1px dashed var(--accent-crimson)', borderRadius: '12px', background: 'rgba(255,0,85,0.05)' }}>
               ⚠️ 실시간 순위 데이터를 불러오는데 실패했습니다. (원인: {error})<br />
               <button onClick={() => window.location.reload()} style={{ marginTop: '1rem', padding: '0.5rem 1.2rem', background: 'var(--accent-cyan)', border: 'none', color: '#000', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}>새로고침</button>
             </div>
           ) : (
             <>
+              {error && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 0 1.5rem 0', padding: '0.8rem 1.2rem', color: '#ff4d4d', border: '1px solid rgba(255, 77, 77, 0.3)', borderRadius: '8px', background: 'rgba(255, 77, 77, 0.08)', fontSize: '0.9rem' }}>
+                  <span>⚠️ 실시간 데이터를 갱신하는데 실패했습니다. (이전 데이터가 표시됩니다)</span>
+                  <button onClick={() => window.location.reload()} style={{ padding: '0.3rem 0.8rem', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>새로고침</button>
+                </div>
+              )}
               <div className="groups-grid">
                 {[...groupsData].sort((a, b) => a.name.localeCompare(b.name)).map(group => {
                   const sortedTeams = [...group.teams].sort((a, b) => {
@@ -937,13 +944,20 @@ function App() {
               <span className="pulse-dot" style={{ display: 'inline-block', marginRight: '0.5rem' }}></span>
               실시간 데이터를 가져오는 중입니다...
             </div>
-          ) : error ? (
+          ) : error && apiMatches.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--accent-crimson)', border: '1px dashed var(--accent-crimson)', borderRadius: '12px', background: 'rgba(255,0,85,0.05)' }}>
               ⚠️ 실시간 경기 데이터를 불러오는데 실패했습니다. (원인: {error})<br />
               <button onClick={() => window.location.reload()} style={{ marginTop: '1rem', padding: '0.5rem 1.2rem', background: 'var(--accent-cyan)', border: 'none', color: '#000', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}>새로고침</button>
             </div>
           ) : (
-            <div className="matches-grid">
+            <>
+              {error && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0.5rem 0 1.5rem 0', padding: '0.8rem 1.2rem', color: '#ff4d4d', border: '1px solid rgba(255, 77, 77, 0.3)', borderRadius: '8px', background: 'rgba(255, 77, 77, 0.08)', fontSize: '0.9rem' }}>
+                  <span>⚠️ 실시간 데이터를 갱신하는데 실패했습니다. (이전 데이터가 표시됩니다)</span>
+                  <button onClick={() => window.location.reload()} style={{ padding: '0.3rem 0.8rem', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>새로고침</button>
+                </div>
+              )}
+              <div className="matches-grid">
               {filteredMatches.map(match => (
                 <div key={match.id} className={`match-card ${match.status === 'LIVE' ? 'live-card-glow' : ''}`}>
                   <div className="card-header">
@@ -1057,6 +1071,7 @@ function App() {
                 </div>
               )}
             </div>
+            </>
           )}
 
           {/* AI Match Analysis Dashboard Section */}
