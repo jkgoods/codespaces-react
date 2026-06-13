@@ -631,8 +631,8 @@ function App() {
               className={`date-chip ${activeFilter === 'LIVE' ? 'active' : ''}`}
               onClick={() => setActiveFilter('LIVE')}
             >
-              <span className="date-chip-label">실시간</span>
-              <span>🔴 라이브</span>
+              <span className="date-chip-label">진행중</span>
+              <span>⚽ 진행중인 경기</span>
             </button>
             {dateList.map(dateStr => {
               const dateObj = new Date(dateStr);
