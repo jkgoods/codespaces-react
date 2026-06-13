@@ -38,157 +38,371 @@ const SparklesIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
 );
 
+// 팀 한글명 및 국기 매핑 테이블
+const TEAM_MAPPING = {
+  "Mexico": { name: "멕시코", flag: "🇲🇽" },
+  "South Africa": { name: "남아프리카 공화국", flag: "🇿🇦" },
+  "South Korea": { name: "대한민국", flag: "🇰🇷" },
+  "Czech Republic": { name: "체코", flag: "🇨🇿" },
+  "Canada": { name: "캐나다", flag: "🇨🇦" },
+  "Bosnia and Herzegovina": { name: "보스니아 헤르체고비나", flag: "🇧🇦" },
+  "United States": { name: "미국", flag: "🇺🇸" },
+  "Paraguay": { name: "파라과이", flag: "🇵🇾" },
+  "Haiti": { name: "아이티", flag: "🇭🇹" },
+  "Scotland": { name: "스코틀랜드", flag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿" },
+  "Australia": { name: "호주", flag: "🇦🇺" },
+  "Turkey": { name: "터키", flag: "🇹🇷" },
+  "Brazil": { name: "브라질", flag: "🇧🇷" },
+  "Morocco": { name: "모로코", flag: "🇲🇦" },
+  "Qatar": { name: "카타르", flag: "🇶🇦" },
+  "Switzerland": { name: "스위스", flag: "🇨🇭" },
+  "Ivory Coast": { name: "코트디부아르", flag: "🇨🇮" },
+  "Ecuador": { name: "에콰도르", flag: "🇪🇨" },
+  "Germany": { name: "독일", flag: "🇩🇪" },
+  "Curaçao": { name: "쿠라사오", flag: "🇨🇼" },
+  "Netherlands": { name: "네덜란드", flag: "🇳🇱" },
+  "Japan": { name: "일본", flag: "🇯🇵" },
+  "Sweden": { name: "스웨덴", flag: "🇸🇪" },
+  "Tunisia": { name: "튀니지", flag: "🇹🇳" },
+  "Iran": { name: "이란", flag: "🇮🇷" },
+  "New Zealand": { name: "뉴질랜드", flag: "🇳🇿" },
+  "Spain": { name: "스페인", flag: "🇪🇸" },
+  "Cape Verde": { name: "카보베르데", flag: "🇨🇻" },
+  "Belgium": { name: "벨기에", flag: "🇧🇪" },
+  "Egypt": { name: "이집트", flag: "🇪🇬" },
+  "Saudi Arabia": { name: "사우디아라비아", flag: "🇸🇦" },
+  "Uruguay": { name: "우루과이", flag: "🇺🇾" },
+  "France": { name: "프랑스", flag: "🇫🇷" },
+  "Senegal": { name: "세네갈", flag: "🇸🇳" },
+  "Iraq": { name: "이라크", flag: "🇮🇶" },
+  "Norway": { name: "노르웨이", flag: "🇳🇴" },
+  "Argentina": { name: "아르헨티나", flag: "🇦🇷" },
+  "Algeria": { name: "알제리", flag: "🇩🇿" },
+  "Austria": { name: "오스트리아", flag: "🇦🇹" },
+  "Jordan": { name: "요르단", flag: "🇯🇴" },
+  "Portugal": { name: "포르투갈", flag: "🇵🇹" },
+  "Democratic Republic of the Congo": { name: "민주 콩고", flag: "🇨🇩" },
+  "England": { name: "잉글랜드", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+  "Croatia": { name: "크로아티아", flag: "🇭🇷" },
+  "Uzbekistan": { name: "우즈베키스탄", flag: "🇺🇿" },
+  "Colombia": { name: "콜롬비아", flag: "🇨🇴" },
+  "Ghana": { name: "가나", flag: "🇬🇭" },
+  "Panama": { name: "판اما", flag: "🇵🇦" }
+};
+
+// 경기장 매핑 테이블
+const STADIUM_MAPPING = {
+  "1": { name: "Estadio Azteca", city: "Mexico City, Mexico" },
+  "2": { name: "Estadio BBVA", city: "Monterrey, Mexico" },
+  "3": { name: "Estadio Akron", city: "Guadalajara, Mexico" },
+  "4": { name: "BC Place", city: "Vancouver, Canada" },
+  "5": { name: "Toronto Stadium", city: "Toronto, Canada" },
+  "6": { name: "MetLife Stadium", city: "New York/New Jersey, USA" },
+  "7": { name: "SoFi Stadium", city: "Los Angeles, USA" },
+  "8": { name: "AT&T Stadium", city: "Dallas, USA" },
+  "9": { name: "Arrowhead Stadium", city: "Kansas City, USA" },
+  "10": { name: "Hard Rock Stadium", city: "Miami, USA" },
+  "11": { name: "Mercedes-Benz Stadium", city: "Atlanta, USA" },
+  "12": { name: "Lincoln Financial Field", city: "Philadelphia, USA" },
+  "13": { name: "Lumen Field", city: "Seattle, USA" },
+  "14": { name: "Levi's Stadium", city: "San Francisco, USA" },
+  "15": { name: "Gillette Stadium", city: "Boston, USA" },
+  "16": { name: "NRG Stadium", city: "Houston, USA" }
+};
+
+// 경기장별 UTC 타임존 오프셋 (2026년 6월 서머타임 기준)
+const STADIUM_TIMEZONE_OFFSETS = {
+  "1": -6,  // Mexico City (CST, UTC-6)
+  "2": -6,  // Monterrey (CST, UTC-6)
+  "3": -6,  // Guadalajara (CST, UTC-6)
+  "4": -7,  // Vancouver (PDT, UTC-7)
+  "5": -4,  // Toronto (EDT, UTC-4)
+  "6": -4,  // New York/New Jersey (EDT, UTC-4)
+  "7": -7,  // Los Angeles (PDT, UTC-7)
+  "8": -5,  // Dallas (CDT, UTC-5)
+  "9": -5,  // Kansas City (CDT, UTC-5)
+  "10": -4, // Miami (EDT, UTC-4)
+  "11": -4, // Atlanta (EDT, UTC-4)
+  "12": -4, // Philadelphia (EDT, UTC-4)
+  "13": -7, // Seattle (PDT, UTC-7)
+  "14": -7, // San Francisco (PDT, UTC-7)
+  "15": -4, // Boston (EDT, UTC-4)
+  "16": -5  // Houston (CDT, UTC-5)
+};
+
+// 당일 2경기의 AI 정밀 분석 데이터 (API의 id 3, 4번에 대응)
+const ANALYSIS_DATA = {
+  3: {
+    matchupName: '캐나다 vs 보스니아 헤르체고비나',
+    stadiumInfo: '오늘 새벽 04:00 - Toronto Stadium',
+    winRate: { teamA: 45, draw: 30, teamB: 25 },
+    teamAInfo: 'FIFA 랭킹: 49위 (개최국)',
+    teamBInfo: 'FIFA 랭킹: 74위',
+    recentForm: {
+      teamA: ['win', 'win', 'draw', 'loss', 'win'],
+      teamB: ['loss', 'draw', 'win', 'loss', 'draw']
+    },
+    recentFormDesc: {
+      teamA: '캐나다는 개최국의 이점을 안고 최근 5경기 3승 1무 1패로 상승세를 탔으나, 이번 경기에서 보스니아의 효율적인 역습에 다소 고전했습니다.',
+      teamB: '보스니아 헤르체고비나는 객관적인 전력 열세에도 불구하고, 수비 조직력을 탄탄히 다지며 역습 위주의 전술로 무승부를 이끌어냈습니다.'
+    },
+    tactics: {
+      teamA: '캐나다 (4-3-3): 알폰소 데이비스의 폭발적인 왼쪽 측면 오버랩과 래린의 박스 안 침투를 위주로 점유율을 62%까지 가져가며 공세를 펼쳤습니다.',
+      teamB: '보스니아 (5-4-1): 낮은 수비 라인 블록을 유지하다가, 탈취 후 롱볼을 통해 루키치의 피지컬을 활용한 심플하고 빠른 역습 루트를 공략했습니다.'
+    },
+    keyMatchups: [
+      { playerA: '알폰소 데이비스 (DF)', teamA: '바이에른 뮌헨', playerB: '아마르 데디치 (DF)', teamB: '레드불 잘츠부르크', desc: '측면 스피드 레이스: 데이비스의 침투를 데디치가 거친 대인 방어로 밀착 마크하며 캐나다의 주 공격 루트를 제어하려 노력했습니다.' },
+      { playerA: '사일 래린 (FW)', teamA: '마요르카', playerB: '데니스 하지카두니치 (DF)', teamB: '함부르크', desc: '박스 안 힘 싸움: 제공권이 좋은 하지카두니치가 래린을 꽁꽁 묶었으나, 후반 한순간 집중력이 무너지며 래린에게 동점 헤더골을 헌납했습니다.' }
+    ],
+    verdict: {
+      predictedScore: '최종 결과: 캐나다 1 - 1 보스니아 헤르체고비나 (경기 종료)',
+      desc: '경기 초반 보스니아의 역습이 적중하여 루키치가 선제골을 터뜨렸습니다. 캐나다는 시종일관 파상공세를 퍼부었으나 골 결정력 부족에 시달리다 후반 78분 사일 래린의 헤더 동점골로 겨우 승점 1점을 챙겼습니다. 예측했던 캐나다의 우세보다 보스니아의 수비 집중력이 돋보인 한 판이었습니다.'
+    }
+  },
+  4: {
+    matchupName: '미국 vs 파라과이',
+    stadiumInfo: '오늘 오전 10:00 - SoFi Stadium',
+    winRate: { teamA: 55, draw: 25, teamB: 20 },
+    teamAInfo: 'FIFA 랭킹: 11위 (개최국)',
+    teamBInfo: 'FIFA 랭킹: 56위',
+    recentForm: {
+      teamA: ['win', 'loss', 'win', 'win', 'draw'],
+      teamB: ['draw', 'win', 'loss', 'draw', 'loss']
+    },
+    recentFormDesc: {
+      teamA: '미국은 풀리식, 맥케니 등 유럽파 핵심 자원들이 최상의 폼을 유지하고 있으며, 최근 5경기에서 평균 2.3골을 터뜨리는 파괴력을 보여주고 있습니다.',
+      teamB: '파라과이는 견고한 수비에 비해 공격 전개 시 창의성 부족으로 어려움을 겪고 있습니다. 최근 5경기에서 단 3골에 그치는 빈공에 허덕입니다.'
+    },
+    tactics: {
+      teamA: '미국 (4-2-3-1): 무사-맥케니-아담스로 구성된 중원의 에너지 레벨을 바탕으로 전방 압박을 감행하고, 풀리식의 하프스페이스 컷인 플레이를 노립니다.',
+      teamB: '파라과이 (4-4-2): 미디엄 블록을 형성하고 컴팩트한 간격을 유지하며, 알미론의 개인 능력과 측면 역습 크로스에 의한 세컨볼 득점을 겨냥합니다.'
+    },
+    keyMatchups: [
+      { playerA: '크리스천 풀리식 (FW)', teamA: 'AC 밀란', playerB: '구스타보 고메스 (DF)', teamB: '팔메이라스', desc: '에이스의 격돌: 풀리식의 변칙적인 안쪽 돌파와 파라과이 수비의 리더 고메스의 커버 범위 및 몸싸움 대결이 승부의 최대 분수령입니다.' },
+      { playerA: '안토니 로빈슨 (DF)', teamA: '풀럼', playerB: '미겔 알미론 (MF)', teamB: '뉴캐슬', desc: '프리미어리거 윙 매치: 로빈슨의 활발한 오버래핑이 파라과이 역습의 핵 알미론을 얼마나 수비적으로 묶어둘 수 있을지가 핵심 열쇠입니다.' }
+    ],
+    verdict: {
+      predictedScore: '예상 스코어: 미국 2 - 1 파라과이 승리 예측',
+      desc: '미국이 강력한 홈 이점과 선수진의 기술적 우위를 앞세워 경기 주도권을 쥘 것입니다. 파라과이의 끈질긴 수비에 고전할 수 있으나 후반 조커 투입과 풀리식의 개인 전술을 통해 2:1 승리를 거둘 것으로 전망됩니다.'
+    }
+  }
+};
+
 function App() {
   const [currentPage, setCurrentPage] = useState('matches'); // 'matches' | 'lotto'
-  const [activeFilter, setActiveFilter] = useState('ALL');
-  const [timeLeft, setTimeLeft] = useState({ hours: 12, minutes: 15, seconds: 45 });
+  const [activeFilter, setActiveFilter] = useState('TODAY');
   const [lottoGames, setLottoGames] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  
+  // API 및 실시간 상태 관리
+  const [apiMatches, setApiMatches] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [selectedAnalysisMatchId, setSelectedAnalysisMatchId] = useState(4); // 기본값: 미국 vs 파라과이 (id: 4)
 
-  // Countdown timer simulation to KOR vs CZE match
+  // 1초 단위 실시간 시각 동기화
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 };
-        } else if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        } else if (prev.hours > 0) {
-          return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        } else {
-          clearInterval(timer);
-          return prev;
-        }
-      });
+      setCurrentTime(new Date());
     }, 1000);
     return () => clearInterval(timer);
   }, []);
 
-  const initialMatches = [
-    {
-      id: 5,
-      group: 'Group C',
-      status: 'SCHEDULED',
-      time: '오늘 11:00',
-      teamA: { name: '대한민국', flag: '🇰🇷', score: null },
-      teamB: { name: '체코', flag: '🇨🇿', score: null },
-      stadium: 'Stadio Azteca',
-      city: 'Mexico City, Mexico',
-      date: '오늘 2026-06-11'
-    },
-    {
-      id: 1,
-      group: 'Group A',
-      status: 'LIVE',
-      time: '74\'',
-      teamA: { name: '멕시코', flag: '🇲🇽', score: 2 },
-      teamB: { name: '미국', flag: '🇺🇸', score: 1 },
-      stadium: 'Estadio Azteca',
-      city: 'Mexico City, Mexico',
-      date: '오늘 2026-06-11'
-    },
-    {
-      id: 2,
-      group: 'Group A',
-      status: 'SCHEDULED',
-      time: '23:30',
-      teamA: { name: '캐나다', flag: '🇨🇦', score: null },
-      teamB: { name: '코스타리카', flag: '🇨🇷', score: null },
-      stadium: 'BC Place Stadium',
-      city: 'Vancouver, Canada',
-      date: '오늘 2026-06-11'
-    },
-    {
-      id: 3,
-      group: 'Group B',
-      status: 'SCHEDULED',
-      time: '내일 02:00',
-      teamA: { name: '브라질', flag: '🇧🇷', score: null },
-      teamB: { name: '아르헨티나', flag: '🇦🇷', score: null },
-      stadium: 'MetLife Stadium',
-      city: 'New York, USA',
-      date: '내일 2026-06-12'
-    },
-    {
-      id: 4,
-      group: 'Group B',
-      status: 'FINISHED',
-      time: '종료',
-      teamA: { name: '우루과이', flag: '🇺🇾', score: 3 },
-      teamB: { name: '일본', flag: '🇯🇵', score: 2 },
-      stadium: 'SoFi Stadium',
-      city: 'Los Angeles, USA',
-      date: '어제 2026-06-10'
-    }
-  ];
-
-  const [matches, setMatches] = useState(initialMatches);
-
-  // Live Score Updates Simulation
+  // 월드컵 공식 실시간 API 연동 (1분 간격 갱신)
   useEffect(() => {
-    const scoreInterval = setInterval(() => {
-      setMatches(prevMatches =>
-        prevMatches.map(match => {
-          if (match.status === 'LIVE') {
-            if (Math.random() < 0.2) {
-              const updatedTeam = Math.random() > 0.5 ? 'teamA' : 'teamB';
-              return {
-                ...match,
-                [updatedTeam]: {
-                  ...match[updatedTeam],
-                  score: match[updatedTeam].score + 1
-                }
-              };
-            }
-          }
-          return match;
-        })
-      );
-    }, 15000);
-
-    return () => clearInterval(scoreInterval);
+    const fetchMatches = async () => {
+      try {
+        const response = await fetch('https://worldcup26.ir/get/games');
+        if (!response.ok) throw new Error('서버 데이터를 불러오는데 실패했습니다.');
+        const data = await response.json();
+        
+        if (data && data.games) {
+          setApiMatches(data.games);
+        }
+        setIsLoading(false);
+      } catch (err) {
+        console.error("API Fetch Error:", err);
+        setError(err.message);
+        setIsLoading(false);
+      }
+    };
+    
+    fetchMatches();
+    const refreshTimer = setInterval(fetchMatches, 60000); // 60초 주기
+    return () => clearInterval(refreshTimer);
   }, []);
 
-  const filteredMatches = matches.filter(match => {
-    if (activeFilter === 'ALL') return true;
-    if (activeFilter === 'LIVE') return match.status === 'LIVE';
-    if (activeFilter === 'GROUP A') return match.group === 'Group A';
-    if (activeFilter === 'GROUP B') return match.group === 'Group B';
-    if (activeFilter === 'GROUP C') return match.group === 'Group C';
-    return true;
+  // API 날짜 포맷 파싱 및 경기장 시간대 보정을 통한 브라우저 로컬 시각 변환
+  const parseMatchDate = (dateStr, stadiumId) => {
+    try {
+      const [datePart, timePart] = dateStr.split(' ');
+      const [month, day, year] = datePart.split('/');
+      const [hours, minutes] = timePart.split(':');
+      
+      const localYear = Number(year);
+      const localMonth = Number(month) - 1;
+      const localDay = Number(day);
+      const localHours = Number(hours);
+      const localMinutes = Number(minutes);
+      
+      const offsetHours = STADIUM_TIMEZONE_OFFSETS[stadiumId] || -5;
+      const localTimestamp = Date.UTC(localYear, localMonth, localDay, localHours, localMinutes);
+      
+      // UTC 타임스탬프 = 경기장 현지 시각 타임스탬프 - 오프셋 밀리초
+      const utcTimestamp = localTimestamp - (offsetHours * 60 * 60 * 1000);
+      return new Date(utcTimestamp);
+    } catch (e) {
+      return new Date();
+    }
+  };
+
+  const getKoreanTeamInfo = (engName) => {
+    return TEAM_MAPPING[engName] || { name: engName, flag: '🏳️' };
+  };
+
+  const getStadiumInfo = (stadiumId) => {
+    return STADIUM_MAPPING[stadiumId] || { name: `Stadium #${stadiumId}`, city: 'North America' };
+  };
+
+  // 실시간 API 데이터 정제 및 동적 가공
+  const processedMatches = apiMatches.map(game => {
+    const kickoffTime = parseMatchDate(game.local_date, game.stadium_id);
+    const isFinished = game.finished === "TRUE" || game.time_elapsed === "finished";
+    const isLive = game.time_elapsed === "live";
+    
+    let status = 'SCHEDULED';
+    if (isFinished) status = 'FINISHED';
+    else if (isLive) status = 'LIVE';
+    
+    const teamAInfo = getKoreanTeamInfo(game.home_team_name_en);
+    const teamBInfo = getKoreanTeamInfo(game.away_team_name_en);
+    const stadiumInfo = getStadiumInfo(game.stadium_id);
+
+    // 상대적 날짜 포맷팅
+    const diffDays = Math.floor((new Date(kickoffTime.toDateString()) - new Date(currentTime.toDateString())) / (1000 * 60 * 60 * 24));
+    const options = { month: 'long', day: 'numeric', weekday: 'short' };
+    const dateStr = kickoffTime.toLocaleDateString('ko-KR', options);
+    
+    let dateDisplay = dateStr;
+    if (diffDays === 0) {
+      dateDisplay = `오늘 ${dateStr}`;
+    } else if (diffDays === 1) {
+      dateDisplay = `내일 ${dateStr}`;
+    } else if (diffDays === -1) {
+      dateDisplay = `어제 ${dateStr}`;
+    }
+
+    const hours = String(kickoffTime.getHours()).padStart(2, '0');
+    const minutes = String(kickoffTime.getMinutes()).padStart(2, '0');
+
+    return {
+      id: Number(game.id),
+      group: game.group === 'R32' ? '32강' : game.group === 'R16' ? '16강' : game.group === 'QF' ? '8강' : game.group === 'SF' ? '4강' : game.group === 'FINAL' ? '결승' : `Group ${game.group}`,
+      status,
+      time: status === 'LIVE' ? '진행중' : `${hours}:${minutes}`,
+      date: dateDisplay,
+      kickoffTime,
+      teamA: {
+        name: teamAInfo.name,
+        flag: teamAInfo.flag,
+        score: status !== 'SCHEDULED' ? Number(game.home_score) : null
+      },
+      teamB: {
+        name: teamBInfo.name,
+        flag: teamBInfo.flag,
+        score: status !== 'SCHEDULED' ? Number(game.away_score) : null
+      },
+      stadium: stadiumInfo.name,
+      city: stadiumInfo.city,
+      hasAnalysis: ANALYSIS_DATA[Number(game.id)] !== undefined
+    };
   });
 
-  // Lotto generation logic (Weighted by 5-year trend analysis)
+  // 가장 가까운 예정 경기(SCHEDULED) 검색
+  const upcomingMatches = processedMatches
+    .filter(match => match.status === 'SCHEDULED')
+    .sort((a, b) => a.kickoffTime - b.kickoffTime);
+    
+  const upcomingMatch = upcomingMatches[0];
+
+  // 카운트다운 잔여 시간 계산
+  const getCountdownTime = (kickoffTime) => {
+    if (!kickoffTime) return { hours: 0, minutes: 0, seconds: 0 };
+    const diffMs = kickoffTime - currentTime;
+    if (diffMs <= 0) return { hours: 0, minutes: 0, seconds: 0 };
+    
+    const seconds = Math.floor((diffMs / 1000) % 60);
+    const minutes = Math.floor((diffMs / 1000 / 60) % 60);
+    const hours = Math.floor(diffMs / 1000 / 60 / 60);
+    
+    return { hours, minutes, seconds };
+  };
+
+  const timeLeft = getCountdownTime(upcomingMatch?.kickoffTime);
+
+  const getFormattedDateString = (date) => {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const getDayOfWeekKorean = (date) => {
+    const days = ['일', '월', '화', '수', '목', '금', '토'];
+    return days[date.getDay()];
+  };
+
+  const todayStr = getFormattedDateString(currentTime);
+
+  // 필터링 적용된 매치 목록
+  const filteredMatches = processedMatches.filter(match => {
+    const matchDateStr = getFormattedDateString(match.kickoffTime);
+    if (activeFilter === 'ALL') return true;
+    if (activeFilter === 'LIVE') return match.status === 'LIVE';
+    if (activeFilter === 'TODAY') return matchDateStr === todayStr;
+    return matchDateStr === activeFilter;
+  });
+
+  // 경기들이 열리는 고유한 날짜 목록 추출
+  const dateList = [...new Set(processedMatches.map(m => getFormattedDateString(m.kickoffTime)))].filter(Boolean).sort();
+
+  // 매치 분석 탭 이동 및 타겟 업데이트
+  const handleViewAnalysis = (matchId) => {
+    if (ANALYSIS_DATA[matchId]) {
+      setSelectedAnalysisMatchId(matchId);
+      const element = document.getElementById('analysis');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
+  // 로또 생성기
   const generateLottoNumbers = () => {
     setIsGenerating(true);
-    // Recent 5-year HOT numbers (higher weight)
     const hotNumbers = [12, 17, 34, 43, 27, 1, 13, 18, 33, 45];
-    // Recent 5-year COLD numbers (lower weight but necessary for balance)
     const coldNumbers = [5, 9, 14, 22, 38, 2, 8, 21, 29, 41];
     
     setTimeout(() => {
       const newGames = [];
       for (let g = 0; g < 5; g++) {
         const gameNumbers = new Set();
-        
-        // 1. Mix Hot Numbers (Ensure 2-3 hot numbers per game)
-        const hotCount = Math.floor(Math.random() * 2) + 2; // 2 or 3
+        const hotCount = Math.floor(Math.random() * 2) + 2; 
         while (gameNumbers.size < hotCount) {
           const randHot = hotNumbers[Math.floor(Math.random() * hotNumbers.length)];
           gameNumbers.add(randHot);
         }
         
-        // 2. Mix Cold Numbers (Ensure 1 cold number for rebound probability)
         const randCold = coldNumbers[Math.floor(Math.random() * coldNumbers.length)];
         gameNumbers.add(randCold);
         
-        // 3. Fill the rest based on balanced odd/even (3:3 or 4:2 ratio)
         while (gameNumbers.size < 6) {
           const num = Math.floor(Math.random() * 45) + 1;
           gameNumbers.add(num);
         }
         
-        // Convert to array and sort ascending
         const sortedGame = Array.from(gameNumbers).sort((a, b) => a - b);
         newGames.push(sortedGame);
       }
@@ -204,6 +418,8 @@ function App() {
     if (num >= 31 && num <= 40) return 'num-31-40';
     return 'num-41-45';
   };
+
+  const activeAnalysis = ANALYSIS_DATA[selectedAnalysisMatchId];
 
   return (
     <div className="app-container">
@@ -256,28 +472,40 @@ function App() {
             </div>
             <div className="hero-content">
               <p className="hero-subtitle">FIFA World Cup 2026</p>
-              <h1 className="hero-title">오늘의 월드컵 매치업</h1>
+              <h1 className="hero-title">실시간 월드컵 스케줄</h1>
               <p className="section-desc" style={{ marginBottom: '2rem', color: 'var(--text-secondary)' }}>
-                북중미 3개국에서 펼쳐지는 세계 최대의 축구 축제. 실시간 스코어와 오늘 진행되는 예선 일정을 한눈에 확인해 보세요.
+                2026 북중미 월드컵 본선 전경기의 실시간 스코어와 상세 일정을 API 연동을 통해 실시간으로 자동 업데이트하여 제공합니다.
               </p>
 
-              <div className="countdown-container">
-                <div className="countdown-box">
-                  <div className="countdown-value">{String(timeLeft.hours).padStart(2, '0')}</div>
-                  <div className="countdown-label">시간</div>
+              {isLoading ? (
+                <div style={{ color: 'var(--accent-cyan)', fontWeight: 600 }}>실시간 경기 일정 데이터 로딩중...</div>
+              ) : upcomingMatch ? (
+                <>
+                  <div className="countdown-container">
+                    <div className="countdown-box">
+                      <div className="countdown-value">{String(timeLeft.hours).padStart(2, '0')}</div>
+                      <div className="countdown-label">시간</div>
+                    </div>
+                    <div className="countdown-box">
+                      <div className="countdown-value">{String(timeLeft.minutes).padStart(2, '0')}</div>
+                      <div className="countdown-label">분</div>
+                    </div>
+                    <div className="countdown-box">
+                      <div className="countdown-value">{String(timeLeft.seconds).padStart(2, '0')}</div>
+                      <div className="countdown-label">초</div>
+                    </div>
+                  </div>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--accent-cyan)', marginTop: '0.75rem', fontWeight: 600 }}>
+                    다음 빅매치 [ {upcomingMatch.teamA.name} {upcomingMatch.teamA.flag} vs {upcomingMatch.teamB.flag} {upcomingMatch.teamB.name} ] 킥오프까지 남은 시간
+                  </p>
+                </>
+              ) : (
+                <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'rgba(0, 240, 255, 0.1)', borderRadius: '8px', border: '1px solid var(--accent-cyan)' }}>
+                  <p style={{ fontSize: '1.1rem', color: 'var(--accent-cyan)', fontWeight: 700, margin: 0 }}>
+                    🔴 금일 예정된 모든 경기가 종료되었거나 실시간 생중계 중입니다!
+                  </p>
                 </div>
-                <div className="countdown-box">
-                  <div className="countdown-value">{String(timeLeft.minutes).padStart(2, '0')}</div>
-                  <div className="countdown-label">분</div>
-                </div>
-                <div className="countdown-box">
-                  <div className="countdown-value">{String(timeLeft.seconds).padStart(2, '0')}</div>
-                  <div className="countdown-label">초</div>
-                </div>
-              </div>
-              <p style={{ fontSize: '0.8rem', color: 'var(--accent-cyan)', marginTop: '0.75rem', fontWeight: 600 }}>
-                빅매치 [ 대한민국 vs 체코 ] 킥오프까지 남은 시간
-              </p>
+              )}
             </div>
           </section>
         </>
@@ -366,273 +594,317 @@ function App() {
       {currentPage === 'matches' && (
         <main className="main-content">
           {/* Section Header with Filters */}
-          <div className="section-header">
+          <div className="section-header" style={{ marginBottom: '1rem' }}>
             <div className="section-title-wrap">
               <h2 className="section-title">매치 스케줄</h2>
-              <p className="section-desc">2026년 6월 11일 기준 실시간 경기 흐름 및 대진표</p>
+              <p className="section-desc">2026 FIFA World Cup 공식 API 연동 실시간 경기 일정 및 결과</p>
             </div>
-            <div className="filter-group">
-              {['ALL', 'LIVE', 'GROUP A', 'GROUP B', 'GROUP C'].map(filter => (
-                <button
-                  key={filter}
-                  className={`filter-btn ${activeFilter === filter ? 'active' : ''}`}
-                  onClick={() => setActiveFilter(filter)}
+          </div>
+
+          {/* Horizontal Date Selector Calendar Tab */}
+          <div className="date-selector-bar">
+            <button 
+              className={`date-chip ${activeFilter === 'ALL' ? 'active' : ''}`}
+              onClick={() => setActiveFilter('ALL')}
+            >
+              <span className="date-chip-label">전체</span>
+              <span>전체 일정</span>
+            </button>
+            <button 
+              className={`date-chip ${activeFilter === 'LIVE' ? 'active' : ''}`}
+              onClick={() => setActiveFilter('LIVE')}
+            >
+              <span className="date-chip-label">실시간</span>
+              <span>🔴 라이브</span>
+            </button>
+            {dateList.map(dateStr => {
+              const dateObj = new Date(dateStr);
+              const isToday = dateStr === todayStr;
+              const diffDays = Math.floor((dateObj - new Date(todayStr)) / (1000 * 60 * 60 * 24));
+              
+              let displayMain = `${dateObj.getMonth() + 1}.${dateObj.getDate()} (${getDayOfWeekKorean(dateObj)})`;
+              let displaySub = "";
+              
+              if (diffDays === 0) {
+                displaySub = "오늘";
+              } else if (diffDays === 1) {
+                displaySub = "내일";
+              } else if (diffDays === -1) {
+                displaySub = "어제";
+              } else {
+                displaySub = `${dateObj.getFullYear() === 2026 ? '' : dateObj.getFullYear() + ' '}${dateObj.getMonth() + 1}월`;
+              }
+              
+              const isActive = activeFilter === dateStr || (activeFilter === 'TODAY' && isToday);
+              
+              return (
+                <button 
+                  key={dateStr}
+                  className={`date-chip ${isActive ? 'active' : ''}`}
+                  onClick={() => setActiveFilter(dateStr)}
                 >
-                  {filter === 'ALL' ? '전체 일정' : filter === 'LIVE' ? '🔴 라이브' : filter}
+                  <span className="date-chip-label">{displaySub}</span>
+                  <span>{displayMain}</span>
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
 
           {/* Matches Grid */}
-          <div className="matches-grid">
-            {filteredMatches.map(match => (
-              <div key={match.id} className="match-card">
-                <div className="card-header">
-                  <span className="group-badge">{match.group}</span>
-                  <span className={`status-badge ${match.status.toLowerCase()}`}>
-                    {match.status === 'LIVE' && <span className="pulse-dot"></span>}
-                    {match.status === 'LIVE' ? `LIVE / ${match.time}` : match.status === 'FINISHED' ? '경기 종료' : match.time}
-                  </span>
-                </div>
-
-                <div className="match-body">
-                  <div className="team-info">
-                    <div className="flag-placeholder">{match.teamA.flag}</div>
-                    <span className="team-name">{match.teamA.name}</span>
+          {isLoading ? (
+            <div style={{ textAlign: 'center', padding: '5rem', color: 'var(--text-secondary)', fontSize: '1.2rem' }}>
+              <span className="pulse-dot" style={{ display: 'inline-block', marginRight: '0.5rem' }}></span>
+              실시간 데이터를 가져오는 중입니다...
+            </div>
+          ) : error ? (
+            <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--accent-crimson)', border: '1px dashed var(--accent-crimson)', borderRadius: '12px', background: 'rgba(255,0,85,0.05)' }}>
+              ⚠️ 실시간 경기 데이터를 불러오는데 실패했습니다. (원인: {error})<br />
+              <button onClick={() => window.location.reload()} style={{ marginTop: '1rem', padding: '0.5rem 1.2rem', background: 'var(--accent-cyan)', border: 'none', color: '#000', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}>새로고침</button>
+            </div>
+          ) : (
+            <div className="matches-grid">
+              {filteredMatches.map(match => (
+                <div key={match.id} className={`match-card ${match.status === 'LIVE' ? 'live-card-glow' : ''}`}>
+                  <div className="card-header">
+                    <span className="group-badge">{match.group}</span>
+                    <span className={`status-badge ${match.status.toLowerCase()}`}>
+                      {match.status === 'LIVE' && <span className="pulse-dot"></span>}
+                      {match.status === 'LIVE' ? `LIVE / 진행중` : match.status === 'FINISHED' ? '경기 종료' : `${match.time} 예정`}
+                    </span>
                   </div>
 
-                  <div className="vs-divider">
-                    {match.status === 'LIVE' || match.status === 'FINISHED' ? (
-                      <div className="live-score">
-                        <span className="score-number">{match.teamA.score}</span>
-                        <span>:</span>
-                        <span className="score-number">{match.teamB.score}</span>
-                      </div>
+                  <div className="match-body">
+                    <div className="team-info">
+                      <div className="flag-placeholder">{match.teamA.flag}</div>
+                      <span className="team-name">{match.teamA.name}</span>
+                    </div>
+
+                    <div className="vs-divider">
+                      {match.status === 'LIVE' || match.status === 'FINISHED' ? (
+                        <div className="live-score">
+                          <span className="score-number">{match.teamA.score}</span>
+                          <span>:</span>
+                          <span className="score-number">{match.teamB.score}</span>
+                        </div>
+                      ) : (
+                        <span className="vs-text">VS</span>
+                      )}
+                    </div>
+
+                    <div className="team-info">
+                      <div className="flag-placeholder">{match.teamB.flag}</div>
+                      <span className="team-name">{match.teamB.name}</span>
+                    </div>
+                  </div>
+
+                  <div className="card-footer">
+                    <div className="footer-item">
+                      <CalendarIcon />
+                      <span>{match.date}</span>
+                    </div>
+                    <div className="footer-item">
+                      <MapPinIcon />
+                      <span>{match.stadium} ({match.city})</span>
+                    </div>
+                    {match.hasAnalysis ? (
+                      <button className="card-action-btn" onClick={() => handleViewAnalysis(match.id)}>
+                        {match.status === 'LIVE' ? '실시간 분석 보기' : match.status === 'FINISHED' ? '경기 분석 & 결과' : 'AI 전력분석'}
+                      </button>
                     ) : (
-                      <span className="vs-text">VS</span>
+                      <button className="card-action-btn" disabled style={{ opacity: 0.4, cursor: 'not-allowed' }}>
+                        분석 대기중
+                      </button>
                     )}
                   </div>
-
-                  <div className="team-info">
-                    <div className="flag-placeholder">{match.teamB.flag}</div>
-                    <span className="team-name">{match.teamB.name}</span>
-                  </div>
                 </div>
-
-                <div className="card-footer">
-                  <div className="footer-item">
-                    <CalendarIcon />
-                    <span>{match.date}</span>
-                  </div>
-                  <div className="footer-item">
-                    <MapPinIcon />
-                    <span>{match.stadium} ({match.city})</span>
-                  </div>
-                  <button className="card-action-btn">
-                    {match.status === 'LIVE' ? '실시간 중계 보기' : match.status === 'FINISHED' ? '하이라이트' : '전력분석 이동'}
-                  </button>
+              ))}
+              {filteredMatches.length === 0 && (
+                <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                  해당 카테고리에 경기가 없습니다.
                 </div>
-              </div>
-            ))}
-            {filteredMatches.length === 0 && (
-              <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-                해당 카테고리에 진행중인 경기가 없습니다.
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
 
           {/* AI Match Analysis Dashboard Section */}
           <section className="analysis-section" id="analysis">
             <div className="analysis-header">
               <span className="analysis-subtitle">AI Match Predictor</span>
-              <h2 className="analysis-title">대한민국 vs 체코 정밀 분석</h2>
-              <p className="section-desc" style={{ marginTop: '0.5rem' }}>오늘 오전 11:00 킥오프 - Estadio Azteca</p>
+              <h2 className="analysis-title">오늘의 매치 정밀 분석</h2>
+              <p className="section-desc" style={{ marginTop: '0.5rem' }}>빅데이터 기반 전력 및 승률 실시간 분석</p>
             </div>
 
-            <div className="analysis-matchup-hero">
-              <div className="analysis-team">
-                <span className="flag">🇰🇷</span>
-                <span className="name">대한민국</span>
-              </div>
-              <span className="analysis-vs">VS</span>
-              <div className="analysis-team">
-                <span className="name">체코</span>
-                <span className="flag">🇨🇿</span>
-              </div>
+            {/* Analysis Selector Tabs */}
+            <div className="analysis-tabs">
+              <button 
+                className={`analysis-tab-btn ${selectedAnalysisMatchId === 3 ? 'active' : ''}`}
+                onClick={() => setSelectedAnalysisMatchId(3)}
+              >
+                🇨🇦 캐나다 vs 보스니아 🇧🇦
+              </button>
+              <button 
+                className={`analysis-tab-btn ${selectedAnalysisMatchId === 4 ? 'active' : ''}`}
+                onClick={() => setSelectedAnalysisMatchId(4)}
+              >
+                🇺🇸 미국 vs 파라과이 🇵🇾
+              </button>
             </div>
 
-            {/* Win Rate Progress Bar */}
-            <div className="win-rate-container">
-              <h3 className="win-rate-title">빅데이터 승률 예측 게이지</h3>
-              <div className="win-rate-bar-wrapper">
-                <div className="win-rate-portion team-a" style={{ width: '54%' }}>
-                  대한민국 승 (54%)
+            {activeAnalysis && (
+              <>
+                <div className="analysis-matchup-hero">
+                  <div className="analysis-team">
+                    <span className="flag">{processedMatches.find(m => m.id === selectedAnalysisMatchId)?.teamA.flag}</span>
+                    <span className="name">{processedMatches.find(m => m.id === selectedAnalysisMatchId)?.teamA.name}</span>
+                  </div>
+                  <span className="analysis-vs">VS</span>
+                  <div className="analysis-team">
+                    <span className="name">{processedMatches.find(m => m.id === selectedAnalysisMatchId)?.teamB.name}</span>
+                    <span className="flag">{processedMatches.find(m => m.id === selectedAnalysisMatchId)?.teamB.flag}</span>
+                  </div>
                 </div>
-                <div className="win-rate-portion draw" style={{ width: '26%' }}>
-                  무승부 (26%)
-                </div>
-                <div className="win-rate-portion team-b" style={{ width: '20%' }}>
-                  체코 승 (20%)
-                </div>
-              </div>
-              <div className="win-rate-labels">
-                <span>FIFA 랭킹: 22위</span>
-                <span>최근 맞대결: 대한민국 우세</span>
-                <span>FIFA 랭킹: 36위</span>
-              </div>
-            </div>
 
-            {/* Grid Details */}
-            <div className="analysis-details-grid">
-              {/* 최근 경기력 */}
-              <div className="analysis-detail-card">
-                <div className="card-title-wrap">
-                  <div className="card-title-icon"><TrendingUpIcon /></div>
-                  <h4 className="card-title-text">최근 경기력 및 흐름 (Recent Form)</h4>
-                </div>
-                <div className="analysis-text">
-                  <div className="form-compare-row">
-                    <span className="form-team-label">대한민국</span>
-                    <div className="form-dots">
-                      <span className="form-dot win">승</span>
-                      <span className="form-dot win">승</span>
-                      <span className="form-dot draw">무</span>
-                      <span className="form-dot loss">패</span>
-                      <span className="form-dot win">승</span>
+                {/* Win Rate Progress Bar */}
+                <div className="win-rate-container">
+                  <h3 className="win-rate-title">빅데이터 승률 예측 게이지</h3>
+                  <div className="win-rate-bar-wrapper">
+                    <div className="win-rate-portion team-a" style={{ width: `${activeAnalysis.winRate.teamA}%` }}>
+                      {processedMatches.find(m => m.id === selectedAnalysisMatchId)?.teamA.name} 승 ({activeAnalysis.winRate.teamA}%)
+                    </div>
+                    <div className="win-rate-portion draw" style={{ width: `${activeAnalysis.winRate.draw}%` }}>
+                      무승부 ({activeAnalysis.winRate.draw}%)
+                    </div>
+                    <div className="win-rate-portion team-b" style={{ width: `${activeAnalysis.winRate.teamB}%` }}>
+                      {processedMatches.find(m => m.id === selectedAnalysisMatchId)?.teamB.name} 승 ({activeAnalysis.winRate.teamB}%)
                     </div>
                   </div>
-                  <div className="form-compare-row" style={{ marginBottom: '1.5rem' }}>
-                    <span className="form-team-label">체코</span>
-                    <div className="form-dots">
-                      <span className="form-dot loss">패</span>
-                      <span className="form-dot draw">무</span>
-                      <span className="form-dot win">승</span>
-                      <span className="form-dot loss">패</span>
-                      <span className="form-dot draw">무</span>
+                  <div className="win-rate-labels">
+                    <span>{activeAnalysis.teamAInfo}</span>
+                    <span>최근 시뮬레이션 맞대결 결과 반영</span>
+                    <span>{activeAnalysis.teamBInfo}</span>
+                  </div>
+                </div>
+
+                {/* Grid Details */}
+                <div className="analysis-details-grid">
+                  {/* 최근 경기력 */}
+                  <div className="analysis-detail-card">
+                    <div className="card-title-wrap">
+                      <div className="card-title-icon"><TrendingUpIcon /></div>
+                      <h4 className="card-title-text">최근 경기력 및 흐름 (Recent Form)</h4>
+                    </div>
+                    <div className="analysis-text">
+                      <div className="form-compare-row">
+                        <span className="form-team-label">{processedMatches.find(m => m.id === selectedAnalysisMatchId)?.teamA.name}</span>
+                        <div className="form-dots">
+                          {activeAnalysis.recentForm.teamA.map((res, idx) => (
+                            <span key={idx} className={`form-dot ${res}`}>{res === 'win' ? '승' : res === 'draw' ? '무' : '패'}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="form-compare-row" style={{ marginBottom: '1.5rem' }}>
+                        <span className="form-team-label">{processedMatches.find(m => m.id === selectedAnalysisMatchId)?.teamB.name}</span>
+                        <div className="form-dots">
+                          {activeAnalysis.recentForm.teamB.map((res, idx) => (
+                            <span key={idx} className={`form-dot ${res}`}>{res === 'win' ? '승' : res === 'draw' ? '무' : '패'}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <p><strong>{processedMatches.find(m => m.id === selectedAnalysisMatchId)?.teamA.name}:</strong> {activeAnalysis.recentFormDesc.teamA}</p>
+                      <p><strong>{processedMatches.find(m => m.id === selectedAnalysisMatchId)?.teamB.name}:</strong> {activeAnalysis.recentFormDesc.teamB}</p>
                     </div>
                   </div>
-                  <p>
-                    <strong>대한민국</strong>은 최근 5경기에서 3승 1무 1패를 기록하며 강력한 상승세를 타고 있습니다. 특히 공격진의 짜임새가 좋아 경기당 평균 2.1골의 높은 득점력을 과시 중입니다.
-                  </p>
-                  <p>
-                    반면, <strong>체코</strong>는 세대교체 단계에서 수비 불안이 발목을 잡으며 최근 5경기 1승 2무 2패에 머물러 있습니다. 경기 후반 집중력 저하로 인한 실점율(평균 1.6실점)이 높습니다.
-                  </p>
-                </div>
-              </div>
 
-              {/* 핵심 전술 포인트 */}
-              <div className="analysis-detail-card">
-                <div className="card-title-wrap">
-                  <div className="card-title-icon"><ActivityIcon /></div>
-                  <h4 className="card-title-text">핵심 전술 매치포인트 (Tactics)</h4>
-                </div>
-                <div className="analysis-text">
-                  <p>
-                    <strong>대한민국 (4-2-3-1):</strong> 이강인의 창의적인 탈압박과 하프스페이스(Half-space) 배급을 축으로, 손흥민이 체코의 느린 풀백 뒷공간을 집요하게 파고드는 형태가 유효할 것입니다. 황인범이 지휘하는 중원 빌드업이 체코의 압박을 풀어내는 속도가 핵심입니다.
-                  </p>
-                  <p>
-                    <strong>체코 (3-4-1-2):</strong> 피지컬 강점을 앞세워 다이렉트 롱 패스를 통한 다이렉트 공격을 선호합니다. 윙백들의 이른 크로스(Early Cross)와 세트피스 상황에서 토마시 소우체크의 압도적인 공중볼 경합력이 대한민국의 최대 경계 대상입니다.
-                  </p>
-                </div>
-              </div>
-
-              {/* 키 매치업 */}
-              <div className="analysis-detail-card">
-                <div className="card-title-wrap">
-                  <div className="card-title-icon"><UsersIcon /></div>
-                  <h4 className="card-title-text">승부의 핵심: 키 플레이어 맞대결</h4>
-                </div>
-                <div className="analysis-text">
-                  <div className="matchup-players" style={{ marginBottom: '1.25rem' }}>
-                    <div className="player-matchup-row">
-                      <div className="player-info-mini">
-                        <span className="player-name-mini">김민재 (DF)</span>
-                        <span className="player-position-mini">바이에른 뮌헨</span>
-                      </div>
-                      <span className="player-vs-indicator">VS</span>
-                      <div className="player-info-mini" style={{ alignItems: 'flex-end' }}>
-                        <span className="player-name-mini">패트릭 시크 (FW)</span>
-                        <span className="player-position-mini">레버쿠젠</span>
-                      </div>
+                  {/* 핵심 전술 포인트 */}
+                  <div className="analysis-detail-card">
+                    <div className="card-title-wrap">
+                      <div className="card-title-icon"><ActivityIcon /></div>
+                      <h4 className="card-title-text">핵심 전술 매치포인트 (Tactics)</h4>
                     </div>
-                    <div className="player-matchup-row">
-                      <div className="player-info-mini">
-                        <span className="player-name-mini">이강인 (MF)</span>
-                        <span className="player-position-mini">파리 생제르맹</span>
-                      </div>
-                      <span className="player-vs-indicator">VS</span>
-                      <div className="player-info-mini" style={{ alignItems: 'flex-end' }}>
-                        <span className="player-name-mini">토마시 소우체크 (MF)</span>
-                        <span className="player-position-mini">웨스트햄</span>
-                      </div>
+                    <div className="analysis-text">
+                      <p><strong>{activeAnalysis.tactics.teamA}</strong></p>
+                      <p><strong>{activeAnalysis.tactics.teamB}</strong></p>
                     </div>
                   </div>
-                  <p>
-                    <strong>김민재 vs 패트릭 시크:</strong> 체코 공격의 핵심인 시크의 제공권 차단이 최우선 과제입니다. 김민재의 월드클래스 스피드와 대인 방어력이 시크의 움직임을 통제한다면 체코의 공격 루트는 반으로 줄어듭니다.
-                  </p>
-                  <p>
-                    <strong>이강인 vs 소우체크:</strong> 좁은 공간을 부수는 기술적 플레이메이커 이강인과 거친 압박 및 신체 조건을 갖춘 소우체크의 2선 충돌에서 대한민국의 전진패스 차단 여부가 결정됩니다.
-                  </p>
-                </div>
-              </div>
 
-              {/* 최종 종합 전망 */}
-              <div className="analysis-detail-card">
-                <div className="card-title-wrap">
-                  <div className="card-title-icon"><CompassIcon /></div>
-                  <h4 className="card-title-text">종합 전망 및 스코어 예측 (Verdict)</h4>
+                  {/* 키 매치업 */}
+                  <div className="analysis-detail-card">
+                    <div className="card-title-wrap">
+                      <div className="card-title-icon"><UsersIcon /></div>
+                      <h4 className="card-title-text">승부의 핵심: 키 플레이어 맞대결</h4>
+                    </div>
+                    <div className="analysis-text">
+                      <div className="matchup-players" style={{ marginBottom: '1.25rem' }}>
+                        {activeAnalysis.keyMatchups.map((matchup, idx) => (
+                          <div key={idx} className="player-matchup-row" style={{ marginBottom: '0.75rem' }}>
+                            <div className="player-info-mini">
+                              <span className="player-name-mini">{matchup.playerA}</span>
+                              <span className="player-position-mini">{matchup.teamA}</span>
+                            </div>
+                            <span className="player-vs-indicator">VS</span>
+                            <div className="player-info-mini" style={{ alignItems: 'flex-end' }}>
+                              <span className="player-name-mini">{matchup.playerB}</span>
+                              <span className="player-position-mini">{matchup.teamB}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {activeAnalysis.keyMatchups.map((matchup, idx) => (
+                        <p key={idx}><strong>{matchup.playerA.split(' ')[0]} vs {matchup.playerB.split(' ')[0]}:</strong> {matchup.desc}</p>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 최종 종합 전망 */}
+                  <div className="analysis-detail-card">
+                    <div className="card-title-wrap">
+                      <div className="card-title-icon"><CompassIcon /></div>
+                      <h4 className="card-title-text">종합 전망 및 결과 (Verdict)</h4>
+                    </div>
+                    <div className="analysis-text">
+                      <p style={{ fontSize: '1.05rem', color: '#fff', fontWeight: 600, marginBottom: '1rem' }}>
+                        {activeAnalysis.verdict.predictedScore}
+                      </p>
+                      <p>{activeAnalysis.verdict.desc}</p>
+                    </div>
+                  </div>
                 </div>
-                <div className="analysis-text">
-                  <p style={{ fontSize: '1.05rem', color: '#fff', fontWeight: 600, marginBottom: '1rem' }}>
-                    예상 스코어: 대한민국 2 - 1 체코 승리 예측
-                  </p>
-                  <p>
-                    체코의 강점인 높이와 다이렉트 패스는 위협적이지만, 대한민국에는 분데스리가 최고의 수비수 김민재가 버티고 있어 박스 안 제공권 경쟁력을 충분히 유지할 것입니다.
-                  </p>
-                  <p>
-                    특히 체코 수비라인의 방향 전환 시 발생하는 느린 기동성은 손흥민, 이재성, 이강인 등 민첩하고 배후 침투에 능한 한국 2선 공격진에게 치명적인 약점이 될 가능성이 높습니다.
-                  </p>
-                  <p>
-                    따라서 경기 중반 이후 한국이 측면 공간을 지속해서 공략하며 2골 이상을 득점할 가능성이 높으며, 세트피스 실점을 1골 이하로 억제해 <strong>2:1의 끈끈한 승리</strong>를 거둘 것으로 정밀 예측됩니다.
-                  </p>
-                </div>
-              </div>
-            </div>
+              </>
+            )}
           </section>
 
           {/* Stadium Spotlight Section */}
           <div className="stadium-section" id="stadiums" style={{ marginTop: '5rem' }}>
             <div className="stadium-img-wrapper">
-              <img src="/world_cup_hero_bg.png" alt="Estadio Azteca" className="stadium-img" />
+              <img src="/world_cup_hero_bg.png" alt="SoFi Stadium" className="stadium-img" />
               <div className="stadium-overlay">
                 <div className="stadium-info-meta">
-                  <span className="stadium-name">아스테카 경기장</span>
-                  <span className="stadium-city">멕시코시티, 멕시코</span>
+                  <span className="stadium-name">소파이 스타디움</span>
+                  <span className="stadium-city">로스앤젤레스, 미국</span>
                 </div>
-                <span className="stadium-capacity">87,523 석</span>
+                <span className="stadium-capacity">70,240 석</span>
               </div>
             </div>
 
             <div className="stadium-desc-wrap">
               <span className="stadium-label">오늘의 추천 경기장</span>
-              <h3 className="stadium-title">Estadio Azteca</h3>
+              <h3 className="stadium-title">SoFi Stadium</h3>
               <p className="stadium-desc">
-                에스타디오 아스테카(Estadio Azteca)는 1970년과 1986년 월드컵 결승전이 개최된 전설적인 축구 성지입니다. 
-                올해 2026년 FIFA 월드컵 개막전이 열리는 영광스러운 무대로 다시 한번 세계의 주목을 받고 있으며, 전 세계 축구 팬들이 꿈꾸는 열정의 중심지입니다.
+                캘리포니아주 잉글우드에 위치한 소파이 스타디움(SoFi Stadium)은 세계에서 가장 비싼 최첨단 다목적 경기장입니다. 
+                중앙에 매달린 거대한 양면 인피니티 스크린과 미래지향적 반투명 지붕 설계가 돋보이며, 오늘 펼쳐질 [ 미국 vs 파라과이 ] 대진이 열리는 메인 무대이기도 합니다.
               </p>
               <div className="stadium-stats">
                 <div className="stat-box">
-                  <div className="stat-value">1966</div>
+                  <div className="stat-value">2020</div>
                   <div className="stat-label">개장 연도</div>
                 </div>
                 <div className="stat-box">
-                  <div className="stat-value">3회</div>
-                  <div className="stat-label">개막전 유치</div>
+                  <div className="stat-value">55억$</div>
+                  <div className="stat-label">건설 비용</div>
                 </div>
                 <div className="stat-box">
-                  <div className="stat-value">2,200m</div>
-                  <div className="stat-label">해발 고도</div>
+                  <div className="stat-value">8회</div>
+                  <div className="stat-label">월드컵 경기수</div>
                 </div>
               </div>
             </div>

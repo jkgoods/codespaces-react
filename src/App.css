@@ -1157,3 +1157,101 @@
   line-height: 1.5;
   text-align: left;
 }
+
+/* Analysis Tabs Styles */
+.analysis-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 0.5rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  width: fit-content;
+  margin: 1.5rem auto 2.5rem auto;
+}
+
+.analysis-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.analysis-tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.analysis-tab-btn.active {
+  background: linear-gradient(135deg, var(--accent-neon), var(--accent-cyan));
+  color: var(--bg-primary);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+}
+
+/* Horizontal Date Selector Bar Styles */
+.date-selector-bar {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0.5rem 0.25rem 1rem 0.25rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border) transparent;
+}
+
+.date-selector-bar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.date-selector-bar::-webkit-scrollbar-thumb {
+  background-color: var(--glass-border);
+  border-radius: 3px;
+}
+
+.date-chip {
+  flex-shrink: 0;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 95px;
+}
+
+.date-chip:hover {
+  border-color: var(--accent-cyan);
+  color: var(--text-primary);
+  background: rgba(0, 240, 255, 0.05);
+}
+
+.date-chip.active {
+  background: linear-gradient(135deg, var(--accent-neon), var(--accent-cyan));
+  color: var(--bg-primary);
+  border-color: transparent;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+
+.date-chip-label {
+  font-size: 0.7rem;
+  opacity: 0.8;
+  margin-bottom: 0.15rem;
+  text-transform: uppercase;
+}
