@@ -4,6 +4,6 @@ import App from './App';
 
 test('renders world cup title', () => {
   render(<App />);
-  const textElement = screen.getByText(/오늘의 월드컵 매치업/i);
+  const textElement = screen.getByText(/실시간 월드컵 스케줄/i);
   expect(textElement).toBeDefined();
 });

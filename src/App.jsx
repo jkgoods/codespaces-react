@@ -90,44 +90,44 @@ const TEAM_MAPPING = {
   "Panama": { name: "판اما", flag: "🇵🇦" }
 };
 
-// 경기장 매핑 테이블
+// 경기장 매핑 테이블 (API id 기준 정렬)
 const STADIUM_MAPPING = {
   "1": { name: "Estadio Azteca", city: "Mexico City, Mexico" },
-  "2": { name: "Estadio BBVA", city: "Monterrey, Mexico" },
-  "3": { name: "Estadio Akron", city: "Guadalajara, Mexico" },
-  "4": { name: "BC Place", city: "Vancouver, Canada" },
-  "5": { name: "Toronto Stadium", city: "Toronto, Canada" },
-  "6": { name: "MetLife Stadium", city: "New York/New Jersey, USA" },
-  "7": { name: "SoFi Stadium", city: "Los Angeles, USA" },
-  "8": { name: "AT&T Stadium", city: "Dallas, USA" },
-  "9": { name: "Arrowhead Stadium", city: "Kansas City, USA" },
-  "10": { name: "Hard Rock Stadium", city: "Miami, USA" },
-  "11": { name: "Mercedes-Benz Stadium", city: "Atlanta, USA" },
-  "12": { name: "Lincoln Financial Field", city: "Philadelphia, USA" },
-  "13": { name: "Lumen Field", city: "Seattle, USA" },
-  "14": { name: "Levi's Stadium", city: "San Francisco, USA" },
-  "15": { name: "Gillette Stadium", city: "Boston, USA" },
-  "16": { name: "NRG Stadium", city: "Houston, USA" }
+  "2": { name: "Estadio Akron", city: "Guadalajara, Mexico" },
+  "3": { name: "Estadio BBVA", city: "Monterrey, Mexico" },
+  "4": { name: "AT&T Stadium", city: "Dallas, USA" },
+  "5": { name: "NRG Stadium", city: "Houston, USA" },
+  "6": { name: "Arrowhead Stadium", city: "Kansas City, USA" },
+  "7": { name: "Mercedes-Benz Stadium", city: "Atlanta, USA" },
+  "8": { name: "Hard Rock Stadium", city: "Miami, USA" },
+  "9": { name: "Gillette Stadium", city: "Boston, USA" },
+  "10": { name: "Lincoln Financial Field", city: "Philadelphia, USA" },
+  "11": { name: "MetLife Stadium", city: "New York/New Jersey, USA" },
+  "12": { name: "Toronto Stadium", city: "Toronto, Canada" },
+  "13": { name: "BC Place", city: "Vancouver, Canada" },
+  "14": { name: "Lumen Field", city: "Seattle, USA" },
+  "15": { name: "Levi's Stadium", city: "San Francisco, USA" },
+  "16": { name: "SoFi Stadium", city: "Los Angeles, USA" }
 };
 
 // 경기장별 UTC 타임존 오프셋 (2026년 6월 서머타임 기준)
 const STADIUM_TIMEZONE_OFFSETS = {
   "1": -6,  // Mexico City (CST, UTC-6)
-  "2": -6,  // Monterrey (CST, UTC-6)
-  "3": -6,  // Guadalajara (CST, UTC-6)
-  "4": -7,  // Vancouver (PDT, UTC-7)
-  "5": -4,  // Toronto (EDT, UTC-4)
-  "6": -4,  // New York/New Jersey (EDT, UTC-4)
-  "7": -7,  // Los Angeles (PDT, UTC-7)
-  "8": -5,  // Dallas (CDT, UTC-5)
-  "9": -5,  // Kansas City (CDT, UTC-5)
-  "10": -4, // Miami (EDT, UTC-4)
-  "11": -4, // Atlanta (EDT, UTC-4)
-  "12": -4, // Philadelphia (EDT, UTC-4)
-  "13": -7, // Seattle (PDT, UTC-7)
-  "14": -7, // San Francisco (PDT, UTC-7)
-  "15": -4, // Boston (EDT, UTC-4)
-  "16": -5  // Houston (CDT, UTC-5)
+  "2": -6,  // Guadalajara (CST, UTC-6)
+  "3": -6,  // Monterrey (CST, UTC-6)
+  "4": -5,  // Dallas (CDT, UTC-5)
+  "5": -5,  // Houston (CDT, UTC-5)
+  "6": -5,  // Kansas City (CDT, UTC-5)
+  "7": -4,  // Atlanta (EDT, UTC-4)
+  "8": -4,  // Miami (EDT, UTC-4)
+  "9": -4,  // Boston (EDT, UTC-4)
+  "10": -4, // Philadelphia (EDT, UTC-4)
+  "11": -4, // New York/New Jersey (EDT, UTC-4)
+  "12": -4, // Toronto (EDT, UTC-4)
+  "13": -7, // Vancouver (PDT, UTC-7)
+  "14": -7, // Seattle (PDT, UTC-7)
+  "15": -7, // San Francisco (PDT, UTC-7)
+  "16": -7  // Los Angeles (PDT, UTC-7)
 };
 
 // 당일 2경기의 AI 정밀 분석 데이터 (API의 id 3, 4번에 대응)
@@ -194,6 +194,7 @@ function App() {
   const [lottoGames, setLottoGames] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isStreamDropdownOpen, setIsStreamDropdownOpen] = useState(false);
+  const [activeHighlightDropdownId, setActiveHighlightDropdownId] = useState(null);
   
   // API 및 실시간 상태 관리
   const [apiMatches, setApiMatches] = useState([]);
@@ -215,6 +216,9 @@ function App() {
     const handleOutsideClick = (e) => {
       if (!e.target.closest('.live-btn-container')) {
         setIsStreamDropdownOpen(false);
+      }
+      if (!e.target.closest('.highlight-btn-container')) {
+        setActiveHighlightDropdownId(null);
       }
     };
     document.addEventListener('click', handleOutsideClick);
@@ -755,9 +759,56 @@ function App() {
                       <MapPinIcon />
                       <span>{match.stadium} ({match.city})</span>
                     </div>
-                    {match.hasAnalysis ? (
+                    {match.status === 'FINISHED' ? (
+                      <div className="card-actions-group highlight-btn-container">
+                        <button className="card-action-btn secondary-btn" style={{ flex: 1 }} onClick={() => handleViewAnalysis(match.id)}>
+                          경기 분석
+                        </button>
+                        <button 
+                          className="card-action-btn highlight-btn" 
+                          style={{ flex: 1 }} 
+                          onClick={() => setActiveHighlightDropdownId(activeHighlightDropdownId === match.id ? null : match.id)}
+                        >
+                          🎥 하이라이트
+                        </button>
+                        {activeHighlightDropdownId === match.id && (
+                          <div className="stream-dropdown highlight-dropdown">
+                            <div className="highlight-dropdown-header">
+                              공식 하이라이트 채널
+                            </div>
+                            <a 
+                              href={`https://chzzk.naver.com/search?query=2026+월드컵+${encodeURIComponent(match.teamA.name)}+${encodeURIComponent(match.teamB.name)}+하이라이트`} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="stream-dropdown-item"
+                            >
+                              🎮 네이버 치지직 검색
+                            </a>
+                            <a 
+                              href={`https://search.naver.com/search.naver?where=video&query=2026+월드컵+${encodeURIComponent(match.teamA.name)}+${encodeURIComponent(match.teamB.name)}+하이라이트`} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="stream-dropdown-item"
+                            >
+                              ⚽ 네이버 스포츠 (비디오)
+                            </a>
+                            <a 
+                              href={`https://www.youtube.com/results?search_query=JTBC+2026+월드컵+${encodeURIComponent(match.teamA.name)}+${encodeURIComponent(match.teamB.name)}+하이라이트`} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="stream-dropdown-item"
+                            >
+                              📺 JTBC 스포츠 (유튜브)
+                            </a>
+                            <div className="highlight-dropdown-info">
+                              💡 경기 종료 약 10~30분 뒤 공식 영상이 업로드됩니다. (공식 채널로 연결)
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ) : match.hasAnalysis ? (
                       <button className="card-action-btn" onClick={() => handleViewAnalysis(match.id)}>
-                        {match.status === 'LIVE' ? '실시간 분석 보기' : match.status === 'FINISHED' ? '경기 분석 & 결과' : 'AI 전력분석'}
+                        {match.status === 'LIVE' ? '실시간 분석 보기' : 'AI 전력분석'}
                       </button>
                     ) : (
                       <button className="card-action-btn" disabled style={{ opacity: 0.4, cursor: 'not-allowed' }}>
