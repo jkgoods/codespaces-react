@@ -386,6 +386,24 @@ function App() {
     return 'num-41-45';
   };
 
+  // 분석 탭에 노출할 매치 목록 필터링 (UX 확장성 및 데이터 스케일러빌리티 확보)
+  const tomorrowStr = getFormattedDateString(new Date(currentTime.getTime() + 24 * 60 * 60 * 1000));
+  const analysisTabMatches = processedMatches.filter(match => {
+    if (!match.hasAnalysis) return false;
+    
+    // 현재 선택된 분석 매치는 무조건 노출하여 탭 선택 상태 유지
+    if (match.id === selectedAnalysisMatchId) return true;
+    
+    // 특정 날짜 필터 선택 시, 해당 날짜의 경기만 노출 (조별리그 일자당 최대 4경기)
+    if (activeFilter !== 'ALL' && activeFilter !== 'LIVE' && activeFilter !== 'TODAY') {
+      return getFormattedDateString(match.kickoffTime) === activeFilter;
+    }
+    
+    // ALL, LIVE, TODAY 필터 시, 오늘과 내일 경기(최대 8경기)만 노출하여 탭 목록이 과대해지는 것 방지
+    const matchDateStr = getFormattedDateString(match.kickoffTime);
+    return matchDateStr === todayStr || matchDateStr === tomorrowStr;
+  });
+
   const activeAnalysis = ANALYSIS_DATA[selectedAnalysisMatchId];
 
   return (
@@ -780,20 +798,17 @@ function App() {
               <p className="section-desc" style={{ marginTop: '0.5rem' }}>빅데이터 기반 전력 및 승률 실시간 분석</p>
             </div>
 
-            {/* Analysis Selector Tabs (동적 생성) */}
+            {/* Analysis Selector Tabs (동적 생성 - 스케일러블 필터링 반영) */}
             <div className="analysis-tabs" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
-              {processedMatches
-                .filter(match => match.hasAnalysis)
-                .map(match => (
-                  <button 
-                    key={match.id}
-                    className={`analysis-tab-btn ${selectedAnalysisMatchId === match.id ? 'active' : ''}`}
-                    onClick={() => setSelectedAnalysisMatchId(match.id)}
-                  >
-                    {match.teamA.flag} {match.teamA.name} vs {match.teamB.name} {match.teamB.flag}
-                  </button>
-                ))
-              }
+              {analysisTabMatches.map(match => (
+                <button 
+                  key={match.id}
+                  className={`analysis-tab-btn ${selectedAnalysisMatchId === match.id ? 'active' : ''}`}
+                  onClick={() => setSelectedAnalysisMatchId(match.id)}
+                >
+                  {match.teamA.flag} {match.teamA.name} vs {match.teamB.name} {match.teamB.flag}
+                </button>
+              ))}
             </div>
 
             {activeAnalysis && (
