@@ -1,0 +1,13 @@
+# AI Developer Guidelines / AI 협업 규칙
+
+## 1. Minimize "Proceed" / Approval Prompts (승인 요청 최소화)
+- **[CRITICAL]** The user is extremely fatigued by repeatedly clicking the "Proceed" / approval button for file modifications and terminal commands.
+- **[필독]** 사용자는 파일 수정 및 터미널 명령어 실행 시 매번 "Proceed" 승인 버튼을 누르는 것에 대해 매우 큰 피로감을 느끼고 있습니다.
+- **You MUST minimize the number of tool calls that trigger user approvals (e.g., `run_command`, `replace_file_content`, `multi_replace_file_content`, `write_to_file`).**
+  - 승인을 유도하는 모든 도구 실행 횟수를 극한으로 줄이십시오.
+- **Batch your file edits**: Do not edit files incrementally. Plan all changes first, and make a single `multi_replace_file_content` or `replace_file_content` call to apply them all at once.
+  - 파일 수정은 야금야금 여러 번 나누어 하지 말고, 철저히 계획하여 단 한 번의 일괄 수정(Batch)으로 끝내십시오.
+- **Minimize terminal commands**: Avoid running commands like `npm run build`, `vitest`, `git status`, `git diff` repeatedly. Only run them when absolutely necessary, preferably at the very end of the task, in a single consolidated execution.
+  - 빌드, 테스트, git 상태 확인 등의 터미널 명령어(`npm run build`, `npx vitest`, `git status` 등)를 수시로 실행하지 마십시오. 작업이 완전히 완료된 마지막 시점에 딱 한 번만 일괄 실행하십시오.
+- **Avoid redundant status checks**: Do not run search/inspect commands or terminal checks unless they are critical to the immediate task.
+  - 단순 확인용 명령어나 중복 체크는 지양하십시오.

@@ -53,7 +53,7 @@ const TEAM_MAPPING = {
   "Haiti": { name: "아이티", flag: "🇭🇹" },
   "Scotland": { name: "스코틀랜드", flag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿" },
   "Australia": { name: "호주", flag: "🇦🇺" },
-  "Turkey": { name: "터키", flag: "🇹🇷" },
+  "Turkey": { name: "튀르키예", flag: "🇹🇷" },
   "Brazil": { name: "브라질", flag: "🇧🇷" },
   "Morocco": { name: "모로코", flag: "🇲🇦" },
   "Qatar": { name: "카타르", flag: "🇶🇦" },
@@ -61,7 +61,7 @@ const TEAM_MAPPING = {
   "Ivory Coast": { name: "코트디부아르", flag: "🇨🇮" },
   "Ecuador": { name: "에콰도르", flag: "🇪🇨" },
   "Germany": { name: "독일", flag: "🇩🇪" },
-  "Curaçao": { name: "쿠라사오", flag: "🇨🇼" },
+  "Curaçao": { name: "퀴라소", flag: "🇨🇼" },
   "Netherlands": { name: "네덜란드", flag: "🇳🇱" },
   "Japan": { name: "일본", flag: "🇯🇵" },
   "Sweden": { name: "스웨덴", flag: "🇸🇪" },
@@ -89,7 +89,59 @@ const TEAM_MAPPING = {
   "Uzbekistan": { name: "우즈베키스탄", flag: "🇺🇿" },
   "Colombia": { name: "콜롬비아", flag: "🇨🇴" },
   "Ghana": { name: "가나", flag: "🇬🇭" },
-  "Panama": { name: "판اما", flag: "🇵🇦" }
+  "Panama": { name: "파나마", flag: "🇵🇦" }
+};
+
+// 팀 ID를 영문명으로 매핑하는 테이블
+const TEAM_ID_TO_EN = {
+  "1": "Mexico",
+  "2": "South Africa",
+  "3": "South Korea",
+  "4": "Czech Republic",
+  "5": "Canada",
+  "6": "Bosnia and Herzegovina",
+  "7": "Qatar",
+  "8": "Switzerland",
+  "9": "Brazil",
+  "10": "Morocco",
+  "11": "Haiti",
+  "12": "Scotland",
+  "13": "United States",
+  "14": "Paraguay",
+  "15": "Australia",
+  "16": "Turkey",
+  "17": "Germany",
+  "18": "Curaçao",
+  "19": "Ivory Coast",
+  "20": "Ecuador",
+  "21": "Netherlands",
+  "22": "Japan",
+  "23": "Sweden",
+  "24": "Tunisia",
+  "25": "Belgium",
+  "26": "Egypt",
+  "27": "Iran",
+  "28": "New Zealand",
+  "29": "Spain",
+  "30": "Cape Verde",
+  "31": "Saudi Arabia",
+  "32": "Uruguay",
+  "33": "France",
+  "34": "Senegal",
+  "35": "Iraq",
+  "36": "Norway",
+  "37": "Argentina",
+  "38": "Algeria",
+  "39": "Austria",
+  "40": "Jordan",
+  "41": "Portugal",
+  "42": "Democratic Republic of the Congo",
+  "43": "Uzbekistan",
+  "44": "Colombia",
+  "45": "England",
+  "46": "Croatia",
+  "47": "Ghana",
+  "48": "Panama"
 };
 
 // 경기장 매핑 테이블 (API id 기준 정렬)
@@ -135,7 +187,7 @@ const STADIUM_TIMEZONE_OFFSETS = {
 
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('matches'); // 'matches' | 'lotto'
+  const [currentPage, setCurrentPage] = useState('matches'); // 'matches' | 'lotto' | 'standings'
   const [activeFilter, setActiveFilter] = useState('TODAY');
   const [lottoGames, setLottoGames] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -144,6 +196,7 @@ function App() {
   
   // API 및 실시간 상태 관리
   const [apiMatches, setApiMatches] = useState([]);
+  const [groupsData, setGroupsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -173,14 +226,24 @@ function App() {
 
   // 월드컵 공식 실시간 API 연동 (1분 간격 갱신)
   useEffect(() => {
-    const fetchMatches = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('https://worldcup26.ir/get/games');
-        if (!response.ok) throw new Error('서버 데이터를 불러오는데 실패했습니다.');
-        const data = await response.json();
+        const [gamesRes, groupsRes] = await Promise.all([
+          fetch('https://worldcup26.ir/get/games'),
+          fetch('https://worldcup26.ir/get/groups')
+        ]);
         
-        if (data && data.games) {
-          setApiMatches(data.games);
+        if (!gamesRes.ok) throw new Error('경기 일정 데이터를 불러오는데 실패했습니다.');
+        if (!groupsRes.ok) throw new Error('조별 순위 데이터를 불러오는데 실패했습니다.');
+        
+        const gamesData = await gamesRes.json();
+        const groupsData = await groupsRes.json();
+        
+        if (gamesData && gamesData.games) {
+          setApiMatches(gamesData.games);
+        }
+        if (groupsData && groupsData.groups) {
+          setGroupsData(groupsData.groups);
         }
         setIsLoading(false);
       } catch (err) {
@@ -190,8 +253,8 @@ function App() {
       }
     };
     
-    fetchMatches();
-    const refreshTimer = setInterval(fetchMatches, 60000); // 60초 주기
+    fetchData();
+    const refreshTimer = setInterval(fetchData, 60000); // 60초 주기
     return () => clearInterval(refreshTimer);
   }, []);
 
@@ -346,6 +409,23 @@ function App() {
     }
   };
 
+  // 그룹 배지 클릭 시 조별 순위 이동 및 스크롤 포커스 효과
+  const handleGroupBadgeClick = (groupName) => {
+    if (!groupName || !groupName.startsWith('Group')) return;
+    const cleanGroupName = groupName.replace(/group/i, '').trim();
+    setCurrentPage('standings');
+    setTimeout(() => {
+      const element = document.getElementById(`group-card-${cleanGroupName}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.classList.add('highlight-pulse');
+        setTimeout(() => {
+          element.classList.remove('highlight-pulse');
+        }, 2000);
+      }
+    }, 100);
+  };
+
   // 로또 생성기
   const generateLottoNumbers = () => {
     setIsGenerating(true);
@@ -425,6 +505,15 @@ function App() {
                 일정 및 결과
               </a>
             </li>
+            <li>
+              <a 
+                href="#standings" 
+                className={currentPage === 'standings' ? 'active' : ''} 
+                onClick={(e) => { e.preventDefault(); setCurrentPage('standings'); }}
+              >
+                📊 조별 순위
+              </a>
+            </li>
             {currentPage === 'matches' && (
               <li><a href="#analysis">AI 전력분석</a></li>
             )}
@@ -465,7 +554,7 @@ function App() {
       </header>
 
       {/* Conditional Page Rendering */}
-      {currentPage === 'matches' ? (
+      {currentPage === 'matches' && (
         <>
           {/* Hero Section */}
           <section className="hero-section">
@@ -526,85 +615,191 @@ function App() {
             </div>
           </section>
         </>
-      ) : (
-          <div className="lotto-page-container">
-            <div className="lotto-header">
-              <span className="analysis-subtitle" style={{ color: 'var(--accent-gold)' }}>Lotto Trend Analyzer & Generator</span>
-              <h1 className="lotto-title">AI 로또 번호 예측 엔진</h1>
-              <p className="lotto-subtitle">최근 5개년 누적 데이터 정밀 모델링 기반 번호 추천</p>
+      )}
+
+      {currentPage === 'lotto' && (
+        <div className="lotto-page-container">
+          <div className="lotto-header">
+            <span className="analysis-subtitle" style={{ color: 'var(--accent-gold)' }}>Lotto Trend Analyzer & Generator</span>
+            <h1 className="lotto-title">AI 로또 번호 예측 엔진</h1>
+            <p className="lotto-subtitle">최근 5개년 누적 데이터 정밀 모델링 기반 번호 추천</p>
+          </div>
+
+          {/* Lotto Stats Dashboard */}
+          <div className="lotto-stat-grid">
+            <div className="lotto-stat-card">
+              <span className="lotto-stat-card-title">가장 뜨거운 번호 (Hot)</span>
+              <span className="lotto-stat-card-value">12, 17, 34, 43, 27</span>
+              <span className="lotto-stat-card-desc">최근 5년간(2021-2026) 당첨 빈도 누적 순위 최상위 그룹입니다.</span>
             </div>
-
-            {/* Lotto Stats Dashboard */}
-            <div className="lotto-stat-grid">
-              <div className="lotto-stat-card">
-                <span className="lotto-stat-card-title">가장 뜨거운 번호 (Hot)</span>
-                <span className="lotto-stat-card-value">12, 17, 34, 43, 27</span>
-                <span className="lotto-stat-card-desc">최근 5년간(2021-2026) 당첨 빈도 누적 순위 최상위 그룹입니다.</span>
-              </div>
-              <div className="lotto-stat-card">
-                <span className="lotto-stat-card-title">이상적인 홀짝 비율 (Odd:Even)</span>
-                <span className="lotto-stat-card-value">3 : 3 (균형)</span>
-                <span className="lotto-stat-card-desc">역대 당첨 조합 중 홀짝 균형 조합이 전체의 42.1%를 차지합니다.</span>
-              </div>
-              <div className="lotto-stat-card">
-                <span className="lotto-stat-card-title">미출현 반등 대기 (Cold)</span>
-                <span className="lotto-stat-card-value">5, 9, 14, 22, 38</span>
-                <span className="lotto-stat-card-desc">최근 12회 동안 미출현하여 확률적으로 반등 확률이 가장 높은 번호입니다.</span>
-              </div>
+            <div className="lotto-stat-card">
+              <span className="lotto-stat-card-title">이상적인 홀짝 비율 (Odd:Even)</span>
+              <span className="lotto-stat-card-value">3 : 3 (균형)</span>
+              <span className="lotto-stat-card-desc">역대 당첨 조합 중 홀짝 균형 조합이 전체의 42.1%를 차지합니다.</span>
             </div>
-
-            {/* Lotto Generator Box */}
-            <div className="lotto-generator-panel">
-              <div className="lotto-description-box">
-                <p>
-                  단순히 기계적인 무작위 추출(랜덤)이 아닙니다. 
-                  지난 5년간의 실제 당첨 기록 약 260회를 종합한 <strong>가중치 알고리즘(Weighted Algorithm)</strong>을 사용합니다. 
-                  핫 넘버(Hot)의 확률적 유지성, 콜드 넘버(Cold)의 반등 확률, 그리고 3:3 또는 4:2의 홀짝 조화 필터를 모두 충족하는 당첨 확률 최적화 조합을 생성합니다.
-                </p>
-                <div className="lotto-analysis-pill-container">
-                  <span className="lotto-analysis-pill">핫 넘버 가중치 +70%</span>
-                  <span className="lotto-analysis-pill">콜드 번호 반등 보정</span>
-                  <span className="lotto-analysis-pill">홀짝 3:3 / 4:2 밸런서</span>
-                  <span className="lotto-analysis-pill">연속 번호 제한 필터</span>
-                </div>
-              </div>
-
-              <button 
-                className="generate-btn" 
-                onClick={generateLottoNumbers}
-                disabled={isGenerating}
-              >
-                {isGenerating ? 'AI 번호 분석중...' : 'AI 분석 번호 추천받기 (5게임)'}
-              </button>
-
-              {/* Lotto Game Result List */}
-              {lottoGames.length > 0 && (
-                <div className="lotto-results-container">
-                  {lottoGames.map((game, index) => (
-                    <div key={index} className="lotto-game-row" style={{ animationDelay: `${index * 0.1}s` }}>
-                      <span className="lotto-game-label">GAME {String.fromCharCode(65 + index)} (추천)</span>
-                      <div className="lotto-balls-list">
-                        {game.map((num, bIdx) => (
-                          <span 
-                            key={bIdx} 
-                            className={`lotto-ball ${getBallClass(num)}`}
-                            style={{ animationDelay: `${(index * 0.1) + (bIdx * 0.08)}s` }}
-                          >
-                            {num}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                  
-                  <div className="lotto-stats-summary">
-                    💡 <strong>AI 전술적 제언:</strong> 생성된 5개 추천 게임은 30번대 강세 흐름과 홀짝 조화율을 엄격히 준수하여 배치되었습니다. 
-                    특정 번호에 쏠리지 않도록 분산 배치되었으니, 다음 추첨일까지 좋은 기운을 담아 선택해 보세요!
-                  </div>
-                </div>
-              )}
+            <div className="lotto-stat-card">
+              <span className="lotto-stat-card-title">미출현 반등 대기 (Cold)</span>
+              <span className="lotto-stat-card-value">5, 9, 14, 22, 38</span>
+              <span className="lotto-stat-card-desc">최근 12회 동안 미출현하여 확률적으로 반등 확률이 가장 높은 번호입니다.</span>
             </div>
           </div>
+
+          {/* Lotto Generator Box */}
+          <div className="lotto-generator-panel">
+            <div className="lotto-description-box">
+              <p>
+                단순히 기계적인 무작위 추출(랜덤)이 아닙니다. 
+                지난 5년간의 실제 당첨 기록 약 260회를 종합한 <strong>가중치 알고리즘(Weighted Algorithm)</strong>을 사용합니다. 
+                핫 넘버(Hot)의 확률적 유지성, 콜드 넘버(Cold)의 반등 확률, 그리고 3:3 또는 4:2의 홀짝 조화 필터를 모두 충족하는 당첨 확률 최적화 조합을 생성합니다.
+              </p>
+              <div className="lotto-analysis-pill-container">
+                <span className="lotto-analysis-pill">핫 넘버 가중치 +70%</span>
+                <span className="lotto-analysis-pill">콜드 번호 반등 보정</span>
+                <span className="lotto-analysis-pill">홀짝 3:3 / 4:2 밸런서</span>
+                <span className="lotto-analysis-pill">연속 번호 제한 필터</span>
+              </div>
+            </div>
+
+            <button 
+              className="generate-btn" 
+              onClick={generateLottoNumbers}
+              disabled={isGenerating}
+            >
+              {isGenerating ? 'AI 번호 분석중...' : 'AI 분석 번호 추천받기 (5게임)'}
+            </button>
+
+            {/* Lotto Game Result List */}
+            {lottoGames.length > 0 && (
+              <div className="lotto-results-container">
+                {lottoGames.map((game, index) => (
+                  <div key={index} className="lotto-game-row" style={{ animationDelay: `${index * 0.1}s` }}>
+                    <span className="lotto-game-label">GAME {String.fromCharCode(65 + index)} (추천)</span>
+                    <div className="lotto-balls-list">
+                      {game.map((num, bIdx) => (
+                        <span 
+                          key={bIdx} 
+                          className={`lotto-ball ${getBallClass(num)}`}
+                          style={{ animationDelay: `${(index * 0.1) + (bIdx * 0.08)}s` }}
+                        >
+                          {num}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+                
+                <div className="lotto-stats-summary">
+                  💡 <strong>AI 전술적 제언:</strong> 생성된 5개 추천 게임은 30번대 강세 흐름과 홀짝 조화율을 엄격히 준수하여 배치되었습니다. 
+                  특정 번호에 쏠리지 않도록 분산 배치되었으니, 다음 추첨일까지 좋은 기운을 담아 선택해 보세요!
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {currentPage === 'standings' && (
+        <div className="standings-page-container">
+          <div className="standings-header">
+            <span className="analysis-subtitle" style={{ color: 'var(--accent-cyan)' }}>Group Standings</span>
+            <h1 className="standings-title">2026 월드컵 조별 순위</h1>
+            <p className="standings-subtitle">각 조별 실시간 경기 결과 반영 및 실시간 승점 순위표</p>
+          </div>
+
+          {isLoading ? (
+            <div style={{ textAlign: 'center', padding: '5rem', color: 'var(--text-secondary)', fontSize: '1.2rem' }}>
+              <span className="pulse-dot" style={{ display: 'inline-block', marginRight: '0.5rem' }}></span>
+              실시간 데이터를 가져오는 중입니다...
+            </div>
+          ) : error ? (
+            <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--accent-crimson)', border: '1px dashed var(--accent-crimson)', borderRadius: '12px', background: 'rgba(255,0,85,0.05)' }}>
+              ⚠️ 실시간 순위 데이터를 불러오는데 실패했습니다. (원인: {error})<br />
+              <button onClick={() => window.location.reload()} style={{ marginTop: '1rem', padding: '0.5rem 1.2rem', background: 'var(--accent-cyan)', border: 'none', color: '#000', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}>새로고침</button>
+            </div>
+          ) : (
+            <>
+              <div className="groups-grid">
+                {[...groupsData].sort((a, b) => a.name.localeCompare(b.name)).map(group => {
+                  const sortedTeams = [...group.teams].sort((a, b) => {
+                    const ptsA = parseInt(a.pts, 10);
+                    const ptsB = parseInt(b.pts, 10);
+                    if (ptsB !== ptsA) return ptsB - ptsA;
+
+                    const gdA = parseInt(a.gd, 10);
+                    const gdB = parseInt(b.gd, 10);
+                    if (gdB !== gdA) return gdB - gdA;
+
+                    const gfA = parseInt(a.gf, 10);
+                    const gfB = parseInt(b.gf, 10);
+                    return gfB - gfA;
+                  });
+
+                  return (
+                    <div key={group.name} id={`group-card-${group.name}`} className="group-card">
+                      <div className="group-card-header">
+                        GROUP {group.name}
+                        <span>1·2위 직행 | 3위 와일드카드 대기</span>
+                      </div>
+                      <table className="standings-table">
+                        <thead>
+                          <tr>
+                            <th style={{ width: '12%' }}>순위</th>
+                            <th style={{ width: '38%', textAlign: 'left' }}>팀</th>
+                            <th style={{ width: '10%' }}>경기</th>
+                            <th style={{ width: '8%' }}>승</th>
+                            <th style={{ width: '8%' }}>무</th>
+                            <th style={{ width: '8%' }}>패</th>
+                            <th style={{ width: '8%' }}>득실</th>
+                            <th style={{ width: '8%' }}>승점</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {sortedTeams.map((team, idx) => {
+                            const teamEnName = TEAM_ID_TO_EN[team.team_id] || "Unknown";
+                            const teamInfo = TEAM_MAPPING[teamEnName] || { name: teamEnName, flag: "🏳️" };
+                            const isQualify = idx < 2;
+                            const isWildcard = idx === 2;
+                            const rowClass = isQualify ? 'qualify-row' : isWildcard ? 'wildcard-row' : '';
+
+                            return (
+                              <tr key={team.team_id} className={rowClass}>
+                                <td>
+                                  <span className="rank-number">{idx + 1}</span>
+                                </td>
+                                <td>
+                                  <div className="team-cell">
+                                    <span className="team-cell-flag">{teamInfo.flag}</span>
+                                    <span className="team-cell-name" title={teamInfo.name}>{teamInfo.name}</span>
+                                  </div>
+                                </td>
+                                <td>{team.mp}</td>
+                                <td>{team.w}</td>
+                                <td>{team.d}</td>
+                                <td>{team.l}</td>
+                                <td>{parseInt(team.gd, 10) > 0 ? `+${team.gd}` : team.gd}</td>
+                                <td className="pts-cell">{team.pts}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="standings-legend">
+                <div className="legend-item">
+                  <div className="legend-color qualify"></div>
+                  <span>32강 직행 (조 1, 2위)</span>
+                </div>
+                <div className="legend-item">
+                  <div className="legend-color wildcard"></div>
+                  <span>와일드카드 경쟁 (조 3위 상위 8개 팀)</span>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       )}
 
       {/* Main Content Area (Matches Page only) */}
@@ -683,7 +878,12 @@ function App() {
               {filteredMatches.map(match => (
                 <div key={match.id} className={`match-card ${match.status === 'LIVE' ? 'live-card-glow' : ''}`}>
                   <div className="card-header">
-                    <span className="group-badge">{match.group}</span>
+                    <span 
+                      className={`group-badge ${match.group.startsWith('Group') ? 'clickable-group-badge' : ''}`}
+                      onClick={() => handleGroupBadgeClick(match.group)}
+                    >
+                      {match.group}
+                    </span>
                     <span className={`status-badge ${match.status.toLowerCase()}`}>
                       {match.status === 'LIVE' && <span className="pulse-dot"></span>}
                       {match.status === 'LIVE' ? `LIVE / 진행중` : match.status === 'FINISHED' ? '경기 종료' : `${match.time} 예정`}
@@ -981,6 +1181,7 @@ function App() {
         </div>
         <div className="footer-links">
           <a href="#matches" onClick={(e) => { e.preventDefault(); setCurrentPage('matches'); }}>매치 일정</a>
+          <a href="#standings" onClick={(e) => { e.preventDefault(); setCurrentPage('standings'); }}>조별 순위</a>
           <a href="#lotto" onClick={(e) => { e.preventDefault(); setCurrentPage('lotto'); }}>로또번호생성</a>
           <a href="#stadiums" onClick={(e) => { e.preventDefault(); setCurrentPage('matches'); }}>경기장 목록</a>
         </div>
