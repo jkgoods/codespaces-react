@@ -16,6 +16,53 @@
   background: rgba(15, 23, 42, 0.85);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--glass-border);
+  transition: var(--transition-smooth);
+}
+
+.nav-menu-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  margin-left: 3rem;
+  transition: var(--transition-smooth);
+}
+
+/* Mobile Hamburger Menu */
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 26px;
+  height: 19px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 110;
+}
+
+.hamburger-bar {
+  width: 26px;
+  height: 2px;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hamburger active animation */
+.hamburger-menu.open .hamburger-bar:nth-child(1) {
+  transform: translateY(8.5px) rotate(45deg);
+  background-color: var(--accent-cyan);
+}
+
+.hamburger-menu.open .hamburger-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-menu.open .hamburger-bar:nth-child(3) {
+  transform: translateY(-8.5px) rotate(-45deg);
+  background-color: var(--accent-cyan);
 }
 
 .logo-container {
@@ -1607,4 +1654,502 @@
 .legend-color.wildcard {
   background: rgba(251, 191, 36, 0.15);
   border: 1px solid rgba(251, 191, 36, 0.35);
+}
+
+/* ==========================================================================
+   Responsive Styling (Tablet & Mobile Optimization)
+   ========================================================================== */
+
+/* 1. Tablet & Pad Devices (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .header-nav {
+    padding: 1rem 4%;
+  }
+
+  .nav-menu-wrapper {
+    margin-left: 1.5rem;
+  }
+
+  .nav-links {
+    gap: 1.25rem;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+  }
+
+  .logo-container {
+    font-size: 1.3rem;
+  }
+
+  .live-btn {
+    padding: 0.45rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .hero-section {
+    height: 380px;
+  }
+
+  .main-content {
+    padding: 3rem 1.5rem;
+  }
+}
+
+/* 2. Mobile Phone Devices (max-width: 767px) */
+@media (max-width: 767px) {
+  /* Header Nav Mobile Overrides */
+  .header-nav {
+    padding: 0.85rem 1rem;
+    height: auto;
+  }
+
+  .hamburger-menu {
+    display: flex;
+  }
+
+  .nav-menu-wrapper {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(13, 17, 26, 0.96);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    gap: 1.75rem;
+    margin-left: 0;
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 99;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease-in-out;
+  }
+
+  .nav-menu-wrapper.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    width: 100%;
+  }
+
+  .nav-links a {
+    font-size: 1.05rem;
+    padding: 0.5rem 0;
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+
+  .live-btn-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .live-btn {
+    width: 80%;
+    justify-content: center;
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .stream-dropdown {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 80%;
+    margin-top: 0.5rem;
+    box-shadow: none;
+    background: rgba(22, 26, 35, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* Hero Section Mobile */
+  .hero-section {
+    height: 280px;
+  }
+
+  .hero-title {
+    margin-bottom: 1rem;
+  }
+
+  .countdown-container {
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .countdown-box {
+    min-width: 65px;
+    padding: 0.5rem;
+    border-radius: 8px;
+  }
+
+  .countdown-value {
+    font-size: 1.4rem;
+  }
+
+  .countdown-label {
+    font-size: 0.65rem;
+  }
+
+  /* General Content Spacing */
+  .main-content {
+    padding: 2rem 1rem;
+  }
+
+  .section-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+    text-align: center;
+  }
+
+  .section-desc {
+    font-size: 0.85rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  /* Date Selector Bar Mobile */
+  .date-selector-bar {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .date-chip {
+    padding: 0.5rem 1rem;
+    min-width: 85px;
+    font-size: 0.8rem;
+  }
+
+  .date-chip-label {
+    font-size: 0.62rem;
+  }
+
+  /* Matches Grid & Cards Mobile */
+  .matches-grid {
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .match-card {
+    padding: 1.25rem;
+    gap: 1rem;
+    border-radius: 16px;
+  }
+
+  .card-header {
+    padding-bottom: 0.25rem;
+  }
+
+  .flag-placeholder {
+    width: 48px;
+    height: 48px;
+    font-size: 1.4rem;
+  }
+
+  .team-name {
+    font-size: 0.95rem;
+  }
+
+  .live-score {
+    font-size: 1.75rem;
+    gap: 0.75rem;
+  }
+
+  .score-number {
+    min-width: 24px;
+  }
+
+  .vs-text {
+    font-size: 1.1rem;
+  }
+
+  .card-footer {
+    padding-top: 0.75rem;
+    font-size: 0.8rem;
+    gap: 0.4rem;
+  }
+
+  .card-actions-group {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .card-action-btn {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+  }
+
+  .stream-dropdown.highlight-dropdown {
+    width: 100%;
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-top: 0.5rem;
+  }
+
+  /* AI Analysis Section Mobile */
+  .analysis-matchup-hero {
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .analysis-team {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .analysis-team .name {
+    font-size: 1.3rem;
+  }
+
+  .analysis-team .flag {
+    font-size: 2.2rem;
+  }
+
+  .analysis-vs {
+    font-size: 1.1rem;
+    padding: 0.15rem 0.75rem;
+  }
+
+  .win-rate-container {
+    margin-bottom: 2.5rem;
+  }
+
+  .win-rate-bar-wrapper {
+    height: 40px;
+    border-radius: 8px;
+  }
+
+  .win-rate-portion {
+    font-size: 0.72rem;
+    padding: 0 0.25rem;
+  }
+
+  .win-rate-labels {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+
+  .win-rate-labels span:nth-child(2) {
+    display: none;
+  }
+
+  .analysis-details-grid {
+    gap: 1.25rem;
+  }
+
+  .analysis-detail-card {
+    padding: 1.25rem;
+  }
+
+  .card-title-text {
+    font-size: 1.05rem;
+  }
+
+  /* Lotto Page Mobile */
+  .lotto-page-container {
+    padding: 2rem 1rem;
+  }
+
+  .lotto-header {
+    margin-bottom: 2rem;
+  }
+
+  .lotto-title {
+    font-size: 1.85rem;
+  }
+
+  .lotto-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .lotto-stat-grid {
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .lotto-stat-card {
+    padding: 1.25rem;
+    gap: 0.5rem;
+    border-radius: 12px;
+  }
+
+  .lotto-stat-card-title {
+    font-size: 1rem;
+  }
+
+  .lotto-stat-card-value {
+    font-size: 1.15rem;
+  }
+
+  .lotto-stat-card-desc {
+    font-size: 0.75rem;
+  }
+
+  .lotto-generator-panel {
+    padding: 1.25rem;
+  }
+
+  .lotto-description-box {
+    font-size: 0.82rem;
+    padding: 1rem;
+  }
+
+  .lotto-balls-list {
+    gap: 0.45rem;
+    justify-content: center;
+  }
+
+  .lotto-ball {
+    width: 36px;
+    height: 36px;
+    font-size: 0.95rem;
+  }
+
+  .lotto-game-row {
+    padding: 1rem;
+  }
+
+  .lotto-game-label {
+    font-size: 0.85rem;
+  }
+
+  /* Standings Page Mobile */
+  .standings-page-container {
+    padding: 2rem 1rem;
+  }
+
+  .standings-header {
+    margin-bottom: 2rem;
+  }
+
+  .standings-title {
+    font-size: 1.85rem;
+  }
+
+  .standings-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .group-card {
+    padding: 1rem;
+    border-radius: 16px;
+    gap: 0.75rem;
+  }
+
+  .group-card-header {
+    font-size: 1.1rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .group-card-header span {
+    font-size: 0.72rem;
+  }
+
+  .standings-table {
+    font-size: 0.75rem;
+  }
+
+  .standings-table th, .standings-table td {
+    padding: 0.5rem 0.2rem;
+  }
+
+  .team-cell {
+    gap: 0.3rem;
+  }
+
+  .team-cell-flag {
+    font-size: 1.05rem;
+  }
+
+  .team-cell-name {
+    max-width: 65px;
+  }
+
+  .rank-number {
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+  }
+
+  .pts-cell {
+    font-size: 0.8rem;
+  }
+
+  .standings-legend {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+    font-size: 0.78rem;
+    margin-top: 1.5rem;
+  }
+
+  /* Stadium Spotlights Mobile */
+  .stadium-section {
+    margin-top: 3rem !important;
+  }
+
+  .stadium-img-wrapper {
+    height: 200px;
+  }
+
+  .stadium-desc-wrap {
+    padding: 1.5rem;
+  }
+
+  .stadium-title {
+    font-size: 1.6rem;
+  }
+
+  .stadium-desc {
+    font-size: 0.88rem;
+  }
+
+  .stadium-stats {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .stat-box {
+    padding: 0.75rem;
+  }
+
+  /* Footer Mobile */
+  .footer-section {
+    padding: 2.5rem 1rem 1.5rem;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    justify-content: center;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .visitor-counter-wrapper {
+    font-size: 0.78rem;
+    padding: 0.4rem 1.1rem;
+  }
 }

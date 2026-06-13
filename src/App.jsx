@@ -193,6 +193,7 @@ function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isStreamDropdownOpen, setIsStreamDropdownOpen] = useState(false);
   const [activeHighlightDropdownId, setActiveHighlightDropdownId] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   // API 및 실시간 상태 관리
   const [apiMatches, setApiMatches] = useState([]);
@@ -536,67 +537,88 @@ function App() {
   return (
     <div className="app-container">
       {/* Navigation Header */}
-      <header className="header-nav">
-        <div className="logo-container" style={{ cursor: 'pointer' }} onClick={() => setCurrentPage('matches')}>
+      <header className={`header-nav ${isMobileMenuOpen ? 'mobile-menu-active' : ''}`}>
+        <div className="logo-container" style={{ cursor: 'pointer' }} onClick={() => { setCurrentPage('matches'); setIsMobileMenuOpen(false); }}>
           <TrophyIcon />
           <span>WORLD CUP <span className="glow-text-cyan">2026</span></span>
         </div>
-        <nav>
-          <ul className="nav-links">
-            <li>
-              <a 
-                href="#matches" 
-                className={currentPage === 'matches' ? 'active' : ''} 
-                onClick={(e) => { e.preventDefault(); setCurrentPage('matches'); }}
-              >
-                일정 및 결과
-              </a>
-            </li>
-            <li>
-              <a 
-                href="#standings" 
-                className={currentPage === 'standings' ? 'active' : ''} 
-                onClick={(e) => { e.preventDefault(); setCurrentPage('standings'); }}
-              >
-                📊 조별 순위
-              </a>
-            </li>
-            {currentPage === 'matches' && (
-              <li><a href="#analysis">AI 전력분석</a></li>
+        
+        {/* Mobile Hamburger Toggle Button */}
+        <button 
+          className={`hamburger-menu ${isMobileMenuOpen ? 'open' : ''}`} 
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="메뉴 열기/닫기"
+        >
+          <span className="hamburger-bar"></span>
+          <span className="hamburger-bar"></span>
+          <span className="hamburger-bar"></span>
+        </button>
+
+        <div className={`nav-menu-wrapper ${isMobileMenuOpen ? 'open' : ''}`}>
+          <nav>
+            <ul className="nav-links">
+              <li>
+                <a 
+                  href="#matches" 
+                  className={currentPage === 'matches' ? 'active' : ''} 
+                  onClick={(e) => { e.preventDefault(); setCurrentPage('matches'); setIsMobileMenuOpen(false); }}
+                >
+                  일정 및 결과
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="#standings" 
+                  className={currentPage === 'standings' ? 'active' : ''} 
+                  onClick={(e) => { e.preventDefault(); setCurrentPage('standings'); setIsMobileMenuOpen(false); }}
+                >
+                  📊 조별 순위
+                </a>
+              </li>
+              {currentPage === 'matches' && (
+                <li>
+                  <a 
+                    href="#analysis"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    AI 전력분석
+                  </a>
+                </li>
+              )}
+              <li>
+                <a 
+                  href="#lotto" 
+                  className={currentPage === 'lotto' ? 'active' : ''} 
+                  onClick={(e) => { e.preventDefault(); setCurrentPage('lotto'); setIsMobileMenuOpen(false); }}
+                  style={{ color: 'var(--accent-gold)' }}
+                >
+                  🎰 로또번호생성
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <div className="live-btn-container" style={{ position: 'relative' }}>
+            <button className="live-btn" onClick={() => setIsStreamDropdownOpen(!isStreamDropdownOpen)}>
+              <span className="pulse-dot"></span>
+              실시간 중계 보기
+            </button>
+            {isStreamDropdownOpen && (
+              <div className="stream-dropdown">
+                <a href="https://sports.news.naver.com" target="_blank" rel="noopener noreferrer" className="stream-dropdown-item" onClick={() => setIsMobileMenuOpen(false)}>
+                  ⚽ 네이버 스포츠
+                </a>
+                <a href="https://chzzk.naver.com" target="_blank" rel="noopener noreferrer" className="stream-dropdown-item" onClick={() => setIsMobileMenuOpen(false)}>
+                  🎮 네이버 치지직
+                </a>
+                <a href="https://onair.jtbc.co.kr" target="_blank" rel="noopener noreferrer" className="stream-dropdown-item" onClick={() => setIsMobileMenuOpen(false)}>
+                  📺 JTBC 온에어
+                </a>
+                <a href="https://www.sooplive.co.kr" target="_blank" rel="noopener noreferrer" className="stream-dropdown-item" onClick={() => setIsMobileMenuOpen(false)}>
+                  📡 SOOP (아프리카TV)
+                </a>
+              </div>
             )}
-            <li>
-              <a 
-                href="#lotto" 
-                className={currentPage === 'lotto' ? 'active' : ''} 
-                onClick={(e) => { e.preventDefault(); setCurrentPage('lotto'); }}
-                style={{ color: 'var(--accent-gold)' }}
-              >
-                🎰 로또번호생성
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <div className="live-btn-container" style={{ position: 'relative' }}>
-          <button className="live-btn" onClick={() => setIsStreamDropdownOpen(!isStreamDropdownOpen)}>
-            <span className="pulse-dot"></span>
-            실시간 중계 보기
-          </button>
-          {isStreamDropdownOpen && (
-            <div className="stream-dropdown">
-              <a href="https://sports.news.naver.com" target="_blank" rel="noopener noreferrer" className="stream-dropdown-item">
-                ⚽ 네이버 스포츠
-              </a>
-              <a href="https://chzzk.naver.com" target="_blank" rel="noopener noreferrer" className="stream-dropdown-item">
-                🎮 네이버 치지직
-              </a>
-              <a href="https://onair.jtbc.co.kr" target="_blank" rel="noopener noreferrer" className="stream-dropdown-item">
-                📺 JTBC 온에어
-              </a>
-              <a href="https://www.sooplive.co.kr" target="_blank" rel="noopener noreferrer" className="stream-dropdown-item">
-                📡 SOOP (아프리카TV)
-              </a>
-            </div>
-          )}
+          </div>
         </div>
       </header>
 
