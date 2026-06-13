@@ -319,12 +319,17 @@ function App() {
     };
   });
 
-  // 가장 가까운 예정 경기(SCHEDULED) 검색
+  // 킥오프 시간이 지나지 않은 가장 가까운 예정 경기(SCHEDULED) 검색
   const upcomingMatches = processedMatches
-    .filter(match => match.status === 'SCHEDULED')
+    .filter(match => match.status === 'SCHEDULED' && (match.kickoffTime - currentTime) > 0)
     .sort((a, b) => a.kickoffTime - b.kickoffTime);
     
   const upcomingMatch = upcomingMatches[0];
+
+  // 킥오프 시간이 지났으나 아직 시작 대기 중인 경기 검색
+  const pendingMatch = processedMatches.find(match => 
+    match.status === 'SCHEDULED' && (currentTime - match.kickoffTime) >= 0
+  );
 
   // 카운트다운 잔여 시간 계산
   const getCountdownTime = (kickoffTime) => {
@@ -479,32 +484,46 @@ function App() {
 
               {isLoading ? (
                 <div style={{ color: 'var(--accent-cyan)', fontWeight: 600 }}>실시간 경기 일정 데이터 로딩중...</div>
-              ) : upcomingMatch ? (
-                <>
-                  <div className="countdown-container">
-                    <div className="countdown-box">
-                      <div className="countdown-value">{String(timeLeft.hours).padStart(2, '0')}</div>
-                      <div className="countdown-label">시간</div>
-                    </div>
-                    <div className="countdown-box">
-                      <div className="countdown-value">{String(timeLeft.minutes).padStart(2, '0')}</div>
-                      <div className="countdown-label">분</div>
-                    </div>
-                    <div className="countdown-box">
-                      <div className="countdown-value">{String(timeLeft.seconds).padStart(2, '0')}</div>
-                      <div className="countdown-label">초</div>
-                    </div>
-                  </div>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--accent-cyan)', marginTop: '0.75rem', fontWeight: 600 }}>
-                    다음 빅매치 [ {upcomingMatch.teamA.name} {upcomingMatch.teamA.flag} vs {upcomingMatch.teamB.flag} {upcomingMatch.teamB.name} ] 킥오프까지 남은 시간
-                  </p>
-                </>
               ) : (
-                <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'rgba(0, 240, 255, 0.1)', borderRadius: '8px', border: '1px solid var(--accent-cyan)' }}>
-                  <p style={{ fontSize: '1.1rem', color: 'var(--accent-cyan)', fontWeight: 700, margin: 0 }}>
-                    🔴 금일 예정된 모든 경기가 종료되었거나 실시간 생중계 중입니다!
-                  </p>
-                </div>
+                <>
+                  {upcomingMatch && (
+                    <>
+                      <div className="countdown-container">
+                        <div className="countdown-box">
+                          <div className="countdown-value">{String(timeLeft.hours).padStart(2, '0')}</div>
+                          <div className="countdown-label">시간</div>
+                        </div>
+                        <div className="countdown-box">
+                          <div className="countdown-value">{String(timeLeft.minutes).padStart(2, '0')}</div>
+                          <div className="countdown-label">분</div>
+                        </div>
+                        <div className="countdown-box">
+                          <div className="countdown-value">{String(timeLeft.seconds).padStart(2, '0')}</div>
+                          <div className="countdown-label">초</div>
+                        </div>
+                      </div>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--accent-cyan)', marginTop: '0.75rem', fontWeight: 600 }}>
+                        다음 빅매치 [ {upcomingMatch.teamA.name} {upcomingMatch.teamA.flag} vs {upcomingMatch.teamB.flag} {upcomingMatch.teamB.name} ] 킥오프까지 남은 시간
+                      </p>
+                    </>
+                  )}
+                  
+                  {pendingMatch && (
+                    <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'rgba(251, 191, 36, 0.1)', borderRadius: '8px', border: '1px solid var(--accent-gold)' }}>
+                      <p style={{ fontSize: '1rem', color: 'var(--accent-gold)', fontWeight: 700, margin: 0 }}>
+                        ⏳ [ {pendingMatch.teamA.name} {pendingMatch.teamA.flag} vs {pendingMatch.teamB.flag} {pendingMatch.teamB.name} ] 경기가 곧 시작됩니다. (킥오프 대기중)
+                      </p>
+                    </div>
+                  )}
+                  
+                  {!upcomingMatch && !pendingMatch && (
+                    <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'rgba(0, 240, 255, 0.1)', borderRadius: '8px', border: '1px solid var(--accent-cyan)' }}>
+                      <p style={{ fontSize: '1.1rem', color: 'var(--accent-cyan)', fontWeight: 700, margin: 0 }}>
+                        🔴 금일 예정된 모든 경기가 종료되었거나 실시간 생중계 중입니다!
+                      </p>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </section>
