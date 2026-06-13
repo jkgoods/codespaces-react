@@ -11,3 +11,9 @@
   - 빌드, 테스트, git 상태 확인 등의 터미널 명령어(`npm run build`, `npx vitest`, `git status` 등)를 수시로 실행하지 마십시오. 작업이 완전히 완료된 마지막 시점에 딱 한 번만 일괄 실행하십시오.
 - **Avoid redundant status checks**: Do not run search/inspect commands or terminal checks unless they are critical to the immediate task.
   - 단순 확인용 명령어나 중복 체크는 지양하십시오.
+
+## 2. Project Environment & Deployment Info (프로젝트 환경 및 배포 정보)
+- **Deployment Platform**: Cloudflare Pages (클라우드플레어 페이지스를 통해 배포 중)
+- **Production URL**: https://codespaces-react.jksdbspw74.workers.dev/
+- **Vite Config Base**: Must be '/' (root path) for Cloudflare Pages to resolve assets correctly. Do NOT change base path in `vite.config.js` or set up GitHub Pages workflows. (자체 CDN 배포이므로 절대 vite base 경로를 변경하거나 GitHub Pages 설정을 추가하지 마십시오.)
+- **Git Branch**: `main` branch is linked to Cloudflare Pages for auto-deployment on push.
