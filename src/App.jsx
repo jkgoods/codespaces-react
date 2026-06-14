@@ -1061,9 +1061,64 @@ function App() {
                           </div>
                         )}
                       </div>
+                    ) : match.status === 'LIVE' ? (
+                      <div className="card-actions-group highlight-btn-container">
+                        <button className="card-action-btn secondary-btn" style={{ flex: 1 }} onClick={() => handleViewAnalysis(match.id)}>
+                          실시간 분석
+                        </button>
+                        <button
+                          className="card-action-btn highlight-btn"
+                          style={{ flex: 1, background: 'linear-gradient(135deg, #e53935, #b71c1c)' }}
+                          onClick={() => setActiveHighlightDropdownId(activeHighlightDropdownId === match.id ? null : match.id)}
+                        >
+                          📺 라이브 시청
+                        </button>
+                        {activeHighlightDropdownId === match.id && (
+                          <div className="stream-dropdown highlight-dropdown">
+                            <div className="highlight-dropdown-header">
+                              🔴 지금 바로 시청하기
+                            </div>
+                            <a
+                              href={`https://chzzk.naver.com/search?query=2026+월드컵+${encodeURIComponent(match.teamA.name)}+${encodeURIComponent(match.teamB.name)}+라이브`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="stream-dropdown-item"
+                            >
+                              🎮 네이버 치지직 (라이브)
+                            </a>
+                            <a
+                              href="https://sports.news.naver.com/wfootball/index"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="stream-dropdown-item"
+                            >
+                              ⚽ 네이버 스포츠 중계
+                            </a>
+                            <a
+                              href={`https://www.youtube.com/results?search_query=JTBC+2026+월드컵+${encodeURIComponent(match.teamA.name)}+${encodeURIComponent(match.teamB.name)}+라이브`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="stream-dropdown-item"
+                            >
+                              📺 JTBC 스포츠 (유튜브)
+                            </a>
+                            <a
+                              href={`https://www.youtube.com/results?search_query=KBS+2026+월드컵+${encodeURIComponent(match.teamA.name)}+${encodeURIComponent(match.teamB.name)}+생중계`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="stream-dropdown-item"
+                            >
+                              📡 KBS (유튜브)
+                            </a>
+                            <div className="highlight-dropdown-info">
+                              💡 방송사 별 중계권에 따라 일부 경기는 시청이 제한될 수 있습니다.
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     ) : match.hasAnalysis ? (
                       <button className="card-action-btn" onClick={() => handleViewAnalysis(match.id)}>
-                        {match.status === 'LIVE' ? '실시간 분석 보기' : 'AI 전력분석'}
+                        AI 전력분석
                       </button>
                     ) : (
                       <button className="card-action-btn" disabled style={{ opacity: 0.4, cursor: 'not-allowed' }}>
