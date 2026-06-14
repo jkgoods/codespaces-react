@@ -272,34 +272,42 @@ function App() {
 
   // 월드컵 공식 실시간 API 연동 (1분 간격 갱신)
   useEffect(() => {
+    let failCount = 0;
+    const FAIL_THRESHOLD = 5; // 연속 5회 실패 시에만 에러 표시
+
     const fetchData = async () => {
       try {
         const [gamesRes, groupsRes] = await Promise.all([
           fetch('https://worldcup26.ir/get/games'),
           fetch('https://worldcup26.ir/get/groups')
         ]);
-        
+
         if (!gamesRes.ok) throw new Error('경기 일정 데이터를 불러오는데 실패했습니다.');
         if (!groupsRes.ok) throw new Error('조별 순위 데이터를 불러오는데 실패했습니다.');
-        
+
         const gamesData = await gamesRes.json();
         const groupsData = await groupsRes.json();
-        
+
         if (gamesData && gamesData.games) {
           setApiMatches(gamesData.games);
         }
         if (groupsData && groupsData.groups) {
           setGroupsData(groupsData.groups);
         }
+        failCount = 0; // 성공 시 실패 카운트 초기화
         setError(null);
         setIsLoading(false);
       } catch (err) {
-        console.error("API Fetch Error:", err);
-        setError(err.message);
+        failCount++;
+        console.warn(`API Fetch 실패 (${failCount}회):`, err.message);
         setIsLoading(false);
+        // 연속 5회 이상 실패할 때만 에러 배너 표시
+        if (failCount >= FAIL_THRESHOLD) {
+          setError(err.message);
+        }
       }
     };
-    
+
     fetchData();
     const refreshTimer = setInterval(fetchData, 60000); // 60초 주기
     return () => clearInterval(refreshTimer);
