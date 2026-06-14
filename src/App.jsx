@@ -208,8 +208,6 @@ function App() {
 
   // 방문자 카운트 API 연동 (중복 카운트 방지 위해 sessionStorage 활용)
   useEffect(() => {
-    const hasVisited = sessionStorage.getItem('has_visited_worldcup2026_v2');
-    
     // 사용자의 로컬 날짜 문자열 생성 (YYYY-MM-DD)
     const d = new Date();
     const year = d.getFullYear();
@@ -221,31 +219,56 @@ function App() {
     const KEY_TODAY = `worldcup2026-react-visitor-count-unique-key-jkgoods-today-${todayStr}`;
     const BASE_URL = 'https://countapi.mileshilliard.com/api/v1';
 
-    const action = !hasVisited ? 'hit' : 'get';
+    // 1. 전체 방문자 카운트 여부 확인 (기존 v2 키도 확인하여 마이그레이션 중복 방지)
+    const hasVisitedTotal = sessionStorage.getItem('has_visited_worldcup2026_total') || sessionStorage.getItem('has_visited_worldcup2026_v2');
+    const totalAction = !hasVisitedTotal ? 'hit' : 'get';
+
+    // 2. 오늘 방문자 카운트 여부 확인 (오늘 날짜 기준으로 체크)
+    const hasVisitedTodayVal = sessionStorage.getItem('has_visited_worldcup2026_today');
+    const todayAction = hasVisitedTodayVal !== todayStr ? 'hit' : 'get';
 
     // 누적 방문자 수 가져오기 (가장 흔한 실패 상황 방지를 위해 개별 패치 및 에러 트래킹)
-    fetch(`${BASE_URL}/${action}/${KEY_TOTAL}`)
-      .then(res => res.json())
+    fetch(`${BASE_URL}/${totalAction}/${KEY_TOTAL}`)
+      .then(res => {
+        if (res.status === 404) {
+          return { value: 0 }; // 키가 없으면 0으로 처리
+        }
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then(data => {
         if (data && typeof data.value === 'number') {
           setVisitorCount(prev => ({ ...prev, total: data.value }));
+          if (!hasVisitedTotal) {
+            sessionStorage.setItem('has_visited_worldcup2026_total', 'true');
+            sessionStorage.setItem('has_visited_worldcup2026_v2', 'true');
+          }
         }
       })
       .catch(err => console.error("Counter API (total) Error:", err));
 
     // 오늘 방문자 수 가져오기
-    fetch(`${BASE_URL}/${action}/${KEY_TODAY}`)
-      .then(res => res.json())
+    fetch(`${BASE_URL}/${todayAction}/${KEY_TODAY}`)
+      .then(res => {
+        if (res.status === 404) {
+          return { value: 0 }; // 오늘 날짜 키가 아직 생성 안 됐으면 0으로 처리
+        }
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then(data => {
         if (data && typeof data.value === 'number') {
           setVisitorCount(prev => ({ ...prev, today: data.value }));
+          if (hasVisitedTodayVal !== todayStr) {
+            sessionStorage.setItem('has_visited_worldcup2026_today', todayStr);
+          }
         }
       })
       .catch(err => console.error("Counter API (today) Error:", err));
-
-    if (!hasVisited) {
-      sessionStorage.setItem('has_visited_worldcup2026_v2', 'true');
-    }
   }, []);
 
   // 1초 단위 실시간 시각 동기화
