@@ -524,24 +524,40 @@ function App() {
   };
 
   // 분석 탭에 노출할 매치 목록 필터링 (UX 확장성 및 데이터 스케일러빌리티 확보)
-  const tomorrowStr = getFormattedDateString(new Date(currentTime.getTime() + 24 * 60 * 60 * 1000));
   const analysisTabMatches = processedMatches.filter(match => {
-    if (!match.hasAnalysis) return false;
-    
-    // 현재 선택된 분석 매치는 무조건 노출하여 탭 선택 상태 유지
-    if (match.id === selectedAnalysisMatchId) return true;
-    
-    // 특정 날짜 필터 선택 시, 해당 날짜의 경기만 노출 (조별리그 일자당 최대 4경기)
+    // 특정 날짜 필터 선택 시, 해당 날짜의 경기만 노출
     if (activeFilter !== 'ALL' && activeFilter !== 'LIVE' && activeFilter !== 'TODAY') {
       return getFormattedDateString(match.kickoffTime) === activeFilter;
     }
-    
-    // ALL, LIVE, TODAY 필터 시, 오늘과 내일 경기(최대 8경기)만 노출하여 탭 목록이 과대해지는 것 방지
-    const matchDateStr = getFormattedDateString(match.kickoffTime);
-    return matchDateStr === todayStr || matchDateStr === tomorrowStr;
+    // ALL, LIVE, TODAY 필터 시에는 오늘 경기만 노출 (내일 경기 혼재 방지)
+    return getFormattedDateString(match.kickoffTime) === todayStr;
   });
 
+  // 선택된 매치가 현재 필터링된 탭 목록에 없으면, 첫 번째 매치를 자동 선택
+  useEffect(() => {
+    if (analysisTabMatches.length > 0 && !analysisTabMatches.find(m => m.id === selectedAnalysisMatchId)) {
+      setSelectedAnalysisMatchId(analysisTabMatches[0].id);
+    }
+  }, [activeFilter, analysisTabMatches, selectedAnalysisMatchId]);
+
   const activeAnalysis = ANALYSIS_DATA[selectedAnalysisMatchId];
+
+  // 선택된 날짜에 따른 분석 섹션 타이틀 동적 생성
+  const getAnalysisTitle = () => {
+    if (activeFilter === 'TODAY' || activeFilter === 'LIVE' || activeFilter === 'ALL') {
+      return '오늘의 매치 정밀 분석';
+    }
+    const d = new Date(activeFilter);
+    const today = new Date(todayStr);
+    const diff = Math.floor((d - today) / (1000 * 60 * 60 * 24));
+    
+    if (diff === 1) return '내일의 매치 정밀 분석';
+    if (diff === -1) return '어제의 매치 정밀 분석';
+    
+    const month = d.getMonth() + 1;
+    const date = d.getDate();
+    return `${month}월 ${date}일 매치 정밀 분석`;
+  };
 
   return (
     <div className="app-container">
@@ -1141,7 +1157,7 @@ function App() {
           <section className="analysis-section" id="analysis">
             <div className="analysis-header">
               <span className="analysis-subtitle">AI Match Predictor</span>
-              <h2 className="analysis-title">오늘의 매치 정밀 분석</h2>
+              <h2 className="analysis-title">{getAnalysisTitle()}</h2>
               <p className="section-desc" style={{ marginTop: '0.5rem' }}>빅데이터 기반 전력 및 승률 실시간 분석</p>
             </div>
 
@@ -1158,7 +1174,7 @@ function App() {
               ))}
             </div>
 
-            {activeAnalysis && (
+            {activeAnalysis ? (
               <>
                 <div className="analysis-matchup-hero">
                   <div className="analysis-team">
@@ -1278,6 +1294,19 @@ function App() {
                   </div>
                 </div>
               </>
+            ) : analysisTabMatches.length > 0 ? (
+              <div className="analysis-empty-state" style={{ textAlign: 'center', padding: '4rem 2rem', background: 'rgba(255,255,255,0.03)', borderRadius: '16px', border: '1px dashed var(--glass-border)', marginTop: '2rem' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🤖⏳</div>
+                <h3 style={{ color: 'var(--text-primary)', marginBottom: '0.5rem' }}>AI 전력 분석 대기중</h3>
+                <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                  현재 AI 모델이 해당 경기의 라인업, 최근 전적, 전술 데이터를 분석하고 있습니다.<br/>
+                  경기 시작 전 정밀 분석 데이터가 자동 업데이트 될 예정입니다.
+                </p>
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                해당 날짜에 예정된 매치가 없습니다.
+              </div>
             )}
           </section>
 

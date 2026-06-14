@@ -2,12 +2,28 @@
   "3": {
     "matchupName": "캐나다 vs 보스니아 헤르체고비나",
     "stadiumInfo": "오늘 새벽 04:00 - Toronto Stadium",
-    "winRate": { "teamA": 45, "draw": 30, "teamB": 25 },
+    "winRate": {
+      "teamA": 45,
+      "draw": 30,
+      "teamB": 25
+    },
     "teamAInfo": "FIFA 랭킹: 49위 (개최국)",
     "teamBInfo": "FIFA 랭킹: 74위",
     "recentForm": {
-      "teamA": ["win", "win", "draw", "loss", "win"],
-      "teamB": ["loss", "draw", "win", "loss", "draw"]
+      "teamA": [
+        "win",
+        "win",
+        "draw",
+        "loss",
+        "win"
+      ],
+      "teamB": [
+        "loss",
+        "draw",
+        "win",
+        "loss",
+        "draw"
+      ]
     },
     "recentFormDesc": {
       "teamA": "캐나다는 개최국의 이점을 안고 최근 5경기 3승 1무 1패로 상승세를 탔으나, 이번 경기에서 보스니아의 효율적인 역습에 다소 고전했습니다.",
@@ -41,12 +57,28 @@
   "4": {
     "matchupName": "미국 vs 파라과이",
     "stadiumInfo": "오늘 오전 10:00 - SoFi Stadium",
-    "winRate": { "teamA": 55, "draw": 25, "teamB": 20 },
+    "winRate": {
+      "teamA": 55,
+      "draw": 25,
+      "teamB": 20
+    },
     "teamAInfo": "FIFA 랭킹: 11위 (개최국)",
     "teamBInfo": "FIFA 랭킹: 56위",
     "recentForm": {
-      "teamA": ["win", "loss", "win", "win", "draw"],
-      "teamB": ["draw", "win", "loss", "draw", "loss"]
+      "teamA": [
+        "win",
+        "loss",
+        "win",
+        "win",
+        "draw"
+      ],
+      "teamB": [
+        "draw",
+        "win",
+        "loss",
+        "draw",
+        "loss"
+      ]
     },
     "recentFormDesc": {
       "teamA": "미국은 풀리식, 맥케니 등 유럽파 핵심 자원들이 최상의 폼을 유지하고 있으며, 최근 5경기에서 평균 2.3골을 터뜨리는 파괴력을 보여주고 있습니다.",
@@ -80,12 +112,28 @@
   "5": {
     "matchupName": "아이티 vs 스코틀랜드",
     "stadiumInfo": "내일 오전 10:00 - Gillette Stadium",
-    "winRate": { "teamA": 15, "draw": 25, "teamB": 60 },
+    "winRate": {
+      "teamA": 15,
+      "draw": 25,
+      "teamB": 60
+    },
     "teamAInfo": "FIFA 랭킹: 86위",
     "teamBInfo": "FIFA 랭킹: 39위",
     "recentForm": {
-      "teamA": ["loss", "draw", "loss", "win", "loss"],
-      "teamB": ["win", "loss", "draw", "win", "win"]
+      "teamA": [
+        "loss",
+        "draw",
+        "loss",
+        "win",
+        "loss"
+      ],
+      "teamB": [
+        "win",
+        "loss",
+        "draw",
+        "win",
+        "win"
+      ]
     },
     "recentFormDesc": {
       "teamA": "아이티는 전력 약세와 조직력 붕괴로 최근 5경기에서 1승에 그쳤으며, 수비 불안이 매우 심각한 상태입니다.",
@@ -119,12 +167,28 @@
   "6": {
     "matchupName": "호주 vs 터키",
     "stadiumInfo": "내일 오후 01:00 - BC Place",
-    "winRate": { "teamA": 35, "draw": 30, "teamB": 35 },
+    "winRate": {
+      "teamA": 35,
+      "draw": 30,
+      "teamB": 35
+    },
     "teamAInfo": "FIFA 랭킹: 24위",
     "teamBInfo": "FIFA 랭킹: 26위",
     "recentForm": {
-      "teamA": ["win", "win", "draw", "win", "loss"],
-      "teamB": ["win", "loss", "win", "draw", "win"]
+      "teamA": [
+        "win",
+        "win",
+        "draw",
+        "win",
+        "loss"
+      ],
+      "teamB": [
+        "win",
+        "loss",
+        "win",
+        "draw",
+        "win"
+      ]
     },
     "recentFormDesc": {
       "teamA": "호주는 피지컬이 뛰어난 수비진과 제공권을 활용해 끈질긴 성향의 선굵은 롱볼 축구를 시도하며 강한 압박을 이어가고 있습니다.",
@@ -158,12 +222,28 @@
   "7": {
     "matchupName": "브라질 vs 모로코",
     "stadiumInfo": "내일 오전 07:00 - MetLife Stadium",
-    "winRate": { "teamA": 60, "draw": 25, "teamB": 15 },
+    "winRate": {
+      "teamA": 60,
+      "draw": 25,
+      "teamB": 15
+    },
     "teamAInfo": "FIFA 랭킹: 5위",
     "teamBInfo": "FIFA 랭킹: 13위",
     "recentForm": {
-      "teamA": ["win", "loss", "win", "win", "draw"],
-      "teamB": ["win", "win", "draw", "win", "loss"]
+      "teamA": [
+        "win",
+        "loss",
+        "win",
+        "win",
+        "draw"
+      ],
+      "teamB": [
+        "win",
+        "win",
+        "draw",
+        "win",
+        "loss"
+      ]
     },
     "recentFormDesc": {
       "teamA": "브라질은 비니시우스와 호드리구 등 월드클래스 측면 파괴력을 앞세워 남미의 기술적인 템포를 되찾았으나 수비 배후 공간 리스크가 상존합니다.",
@@ -197,12 +277,28 @@
   "8": {
     "matchupName": "카타르 vs 스위스",
     "stadiumInfo": "내일 오전 04:00 - Levi's Stadium",
-    "winRate": { "teamA": 20, "draw": 30, "teamB": 50 },
+    "winRate": {
+      "teamA": 20,
+      "draw": 30,
+      "teamB": 50
+    },
     "teamAInfo": "FIFA 랭킹: 38위",
     "teamBInfo": "FIFA 랭킹: 19위",
     "recentForm": {
-      "teamA": ["win", "loss", "draw", "win", "draw"],
-      "teamB": ["win", "draw", "win", "loss", "win"]
+      "teamA": [
+        "win",
+        "loss",
+        "draw",
+        "win",
+        "draw"
+      ],
+      "teamB": [
+        "win",
+        "draw",
+        "win",
+        "loss",
+        "win"
+      ]
     },
     "recentFormDesc": {
       "teamA": "카타르는 견고한 수비와 조직력을 보여주나, 유럽 팀들과의 피지컬 싸움과 높이 경쟁에서 다소 수세에 몰리는 경향이 있습니다.",
@@ -231,6 +327,390 @@
     "verdict": {
       "predictedScore": "예상 스코어: 카타르 0 - 1 스위스 스위스 승리 예측",
       "desc": "카타르가 강한 밀집 수비로 오랜 시간 버텨낼 수 있으나, 스위스의 영리한 세트피스나 자카의 하프스페이스 패스 변칙 타격을 견디기는 쉽지 않아 보입니다. 후반 스위스의 집중력과 피지컬 우위가 1-0 신승을 거둘 것으로 조심스럽게 예측합니다."
+    }
+  },
+  "9": {
+    "matchupName": "Ivory Coast vs Ecuador",
+    "stadiumInfo": "내일 예정 - 10번 경기장",
+    "winRate": {
+      "teamA": 45,
+      "draw": 20,
+      "teamB": 35
+    },
+    "teamAInfo": "상승세 / 공격 주도",
+    "teamBInfo": "수비 집중 / 역습 패턴",
+    "recentForm": {
+      "teamA": [
+        "win",
+        "draw",
+        "win",
+        "win",
+        "draw"
+      ],
+      "teamB": [
+        "loss",
+        "draw",
+        "win",
+        "loss",
+        "draw"
+      ]
+    },
+    "recentFormDesc": {
+      "teamA": "[AI 자동 생성] Ivory Coast은 최근 공격진의 유기적인 패스 워크가 살아나며 흐름이 좋습니다.",
+      "teamB": "[AI 자동 생성] Ecuador은 상대적으로 수비에 치중하며 끈적한 경기를 펼치고 있습니다."
+    },
+    "tactics": {
+      "teamA": "[AI 전술 요약] 측면 윙어의 오버랩을 활용한 컷백 크로스 공격 집중.",
+      "teamB": "[AI 전술 요약] 중앙을 두껍게 한 5백 형성 및 선 수비 후 타겟맨 롱볼 카운터."
+    },
+    "keyMatchups": [
+      {
+        "playerA": "A팀 핵심 플레이어",
+        "teamA": "Ivory Coast",
+        "playerB": "B팀 핵심 대인 마크맨",
+        "teamB": "Ecuador",
+        "desc": "스피드와 힘이 충돌하는 이 지역에서 승패의 향방이 갈릴 것입니다."
+      }
+    ],
+    "verdict": {
+      "predictedScore": "예상 스코어: Ivory Coast 1 - 0 우세",
+      "desc": "[AI 전망] 전반적인 데이터와 객관적 전력은 Ivory Coast의 우세를 점치고 있으나, 단기전 특성상 이변의 가능성도 열려 있습니다."
+    }
+  },
+  "10": {
+    "matchupName": "Germany vs Curaçao",
+    "stadiumInfo": "내일 예정 - 5번 경기장",
+    "winRate": {
+      "teamA": 60,
+      "draw": 20,
+      "teamB": 17
+    },
+    "teamAInfo": "상승세 / 공격 주도",
+    "teamBInfo": "수비 집중 / 역습 패턴",
+    "recentForm": {
+      "teamA": [
+        "win",
+        "draw",
+        "win",
+        "win",
+        "draw"
+      ],
+      "teamB": [
+        "loss",
+        "draw",
+        "win",
+        "loss",
+        "draw"
+      ]
+    },
+    "recentFormDesc": {
+      "teamA": "[AI 자동 생성] Germany은 최근 공격진의 유기적인 패스 워크가 살아나며 흐름이 좋습니다.",
+      "teamB": "[AI 자동 생성] Curaçao은 상대적으로 수비에 치중하며 끈적한 경기를 펼치고 있습니다."
+    },
+    "tactics": {
+      "teamA": "[AI 전술 요약] 측면 윙어의 오버랩을 활용한 컷백 크로스 공격 집중.",
+      "teamB": "[AI 전술 요약] 중앙을 두껍게 한 5백 형성 및 선 수비 후 타겟맨 롱볼 카운터."
+    },
+    "keyMatchups": [
+      {
+        "playerA": "A팀 핵심 플레이어",
+        "teamA": "Germany",
+        "playerB": "B팀 핵심 대인 마크맨",
+        "teamB": "Curaçao",
+        "desc": "스피드와 힘이 충돌하는 이 지역에서 승패의 향방이 갈릴 것입니다."
+      }
+    ],
+    "verdict": {
+      "predictedScore": "예상 스코어: Germany 1 - 0 우세",
+      "desc": "[AI 전망] 전반적인 데이터와 객관적 전력은 Germany의 우세를 점치고 있으나, 단기전 특성상 이변의 가능성도 열려 있습니다."
+    }
+  },
+  "11": {
+    "matchupName": "Netherlands vs Japan",
+    "stadiumInfo": "내일 예정 - 4번 경기장",
+    "winRate": {
+      "teamA": 52,
+      "draw": 20,
+      "teamB": 25
+    },
+    "teamAInfo": "상승세 / 공격 주도",
+    "teamBInfo": "수비 집중 / 역습 패턴",
+    "recentForm": {
+      "teamA": [
+        "win",
+        "draw",
+        "win",
+        "win",
+        "draw"
+      ],
+      "teamB": [
+        "loss",
+        "draw",
+        "win",
+        "loss",
+        "draw"
+      ]
+    },
+    "recentFormDesc": {
+      "teamA": "[AI 자동 생성] Netherlands은 최근 공격진의 유기적인 패스 워크가 살아나며 흐름이 좋습니다.",
+      "teamB": "[AI 자동 생성] Japan은 상대적으로 수비에 치중하며 끈적한 경기를 펼치고 있습니다."
+    },
+    "tactics": {
+      "teamA": "[AI 전술 요약] 측면 윙어의 오버랩을 활용한 컷백 크로스 공격 집중.",
+      "teamB": "[AI 전술 요약] 중앙을 두껍게 한 5백 형성 및 선 수비 후 타겟맨 롱볼 카운터."
+    },
+    "keyMatchups": [
+      {
+        "playerA": "A팀 핵심 플레이어",
+        "teamA": "Netherlands",
+        "playerB": "B팀 핵심 대인 마크맨",
+        "teamB": "Japan",
+        "desc": "스피드와 힘이 충돌하는 이 지역에서 승패의 향방이 갈릴 것입니다."
+      }
+    ],
+    "verdict": {
+      "predictedScore": "예상 스코어: Netherlands 1 - 0 우세",
+      "desc": "[AI 전망] 전반적인 데이터와 객관적 전력은 Netherlands의 우세를 점치고 있으나, 단기전 특성상 이변의 가능성도 열려 있습니다."
+    }
+  },
+  "12": {
+    "matchupName": "Sweden vs Tunisia",
+    "stadiumInfo": "내일 예정 - 3번 경기장",
+    "winRate": {
+      "teamA": 37,
+      "draw": 20,
+      "teamB": 23
+    },
+    "teamAInfo": "상승세 / 공격 주도",
+    "teamBInfo": "수비 집중 / 역습 패턴",
+    "recentForm": {
+      "teamA": [
+        "win",
+        "draw",
+        "win",
+        "win",
+        "draw"
+      ],
+      "teamB": [
+        "loss",
+        "draw",
+        "win",
+        "loss",
+        "draw"
+      ]
+    },
+    "recentFormDesc": {
+      "teamA": "[AI 자동 생성] Sweden은 최근 공격진의 유기적인 패스 워크가 살아나며 흐름이 좋습니다.",
+      "teamB": "[AI 자동 생성] Tunisia은 상대적으로 수비에 치중하며 끈적한 경기를 펼치고 있습니다."
+    },
+    "tactics": {
+      "teamA": "[AI 전술 요약] 측면 윙어의 오버랩을 활용한 컷백 크로스 공격 집중.",
+      "teamB": "[AI 전술 요약] 중앙을 두껍게 한 5백 형성 및 선 수비 후 타겟맨 롱볼 카운터."
+    },
+    "keyMatchups": [
+      {
+        "playerA": "A팀 핵심 플레이어",
+        "teamA": "Sweden",
+        "playerB": "B팀 핵심 대인 마크맨",
+        "teamB": "Tunisia",
+        "desc": "스피드와 힘이 충돌하는 이 지역에서 승패의 향방이 갈릴 것입니다."
+      }
+    ],
+    "verdict": {
+      "predictedScore": "예상 스코어: Sweden 1 - 0 우세",
+      "desc": "[AI 전망] 전반적인 데이터와 객관적 전력은 Sweden의 우세를 점치고 있으나, 단기전 특성상 이변의 가능성도 열려 있습니다."
+    }
+  },
+  "13": {
+    "matchupName": "Iran vs New Zealand",
+    "stadiumInfo": "내일 예정 - 16번 경기장",
+    "winRate": {
+      "teamA": 42,
+      "draw": 20,
+      "teamB": 33
+    },
+    "teamAInfo": "상승세 / 공격 주도",
+    "teamBInfo": "수비 집중 / 역습 패턴",
+    "recentForm": {
+      "teamA": [
+        "win",
+        "draw",
+        "win",
+        "win",
+        "draw"
+      ],
+      "teamB": [
+        "loss",
+        "draw",
+        "win",
+        "loss",
+        "draw"
+      ]
+    },
+    "recentFormDesc": {
+      "teamA": "[AI 자동 생성] Iran은 최근 공격진의 유기적인 패스 워크가 살아나며 흐름이 좋습니다.",
+      "teamB": "[AI 자동 생성] New Zealand은 상대적으로 수비에 치중하며 끈적한 경기를 펼치고 있습니다."
+    },
+    "tactics": {
+      "teamA": "[AI 전술 요약] 측면 윙어의 오버랩을 활용한 컷백 크로스 공격 집중.",
+      "teamB": "[AI 전술 요약] 중앙을 두껍게 한 5백 형성 및 선 수비 후 타겟맨 롱볼 카운터."
+    },
+    "keyMatchups": [
+      {
+        "playerA": "A팀 핵심 플레이어",
+        "teamA": "Iran",
+        "playerB": "B팀 핵심 대인 마크맨",
+        "teamB": "New Zealand",
+        "desc": "스피드와 힘이 충돌하는 이 지역에서 승패의 향방이 갈릴 것입니다."
+      }
+    ],
+    "verdict": {
+      "predictedScore": "예상 스코어: Iran 1 - 0 우세",
+      "desc": "[AI 전망] 전반적인 데이터와 객관적 전력은 Iran의 우세를 점치고 있으나, 단기전 특성상 이변의 가능성도 열려 있습니다."
+    }
+  },
+  "14": {
+    "matchupName": "Spain vs Cape Verde",
+    "stadiumInfo": "내일 예정 - 7번 경기장",
+    "winRate": {
+      "teamA": 56,
+      "draw": 20,
+      "teamB": 22
+    },
+    "teamAInfo": "상승세 / 공격 주도",
+    "teamBInfo": "수비 집중 / 역습 패턴",
+    "recentForm": {
+      "teamA": [
+        "win",
+        "draw",
+        "win",
+        "win",
+        "draw"
+      ],
+      "teamB": [
+        "loss",
+        "draw",
+        "win",
+        "loss",
+        "draw"
+      ]
+    },
+    "recentFormDesc": {
+      "teamA": "[AI 자동 생성] Spain은 최근 공격진의 유기적인 패스 워크가 살아나며 흐름이 좋습니다.",
+      "teamB": "[AI 자동 생성] Cape Verde은 상대적으로 수비에 치중하며 끈적한 경기를 펼치고 있습니다."
+    },
+    "tactics": {
+      "teamA": "[AI 전술 요약] 측면 윙어의 오버랩을 활용한 컷백 크로스 공격 집중.",
+      "teamB": "[AI 전술 요약] 중앙을 두껍게 한 5백 형성 및 선 수비 후 타겟맨 롱볼 카운터."
+    },
+    "keyMatchups": [
+      {
+        "playerA": "A팀 핵심 플레이어",
+        "teamA": "Spain",
+        "playerB": "B팀 핵심 대인 마크맨",
+        "teamB": "Cape Verde",
+        "desc": "스피드와 힘이 충돌하는 이 지역에서 승패의 향방이 갈릴 것입니다."
+      }
+    ],
+    "verdict": {
+      "predictedScore": "예상 스코어: Spain 1 - 0 우세",
+      "desc": "[AI 전망] 전반적인 데이터와 객관적 전력은 Spain의 우세를 점치고 있으나, 단기전 특성상 이변의 가능성도 열려 있습니다."
+    }
+  },
+  "15": {
+    "matchupName": "Belgium vs Egypt",
+    "stadiumInfo": "내일 예정 - 14번 경기장",
+    "winRate": {
+      "teamA": 58,
+      "draw": 20,
+      "teamB": 24
+    },
+    "teamAInfo": "상승세 / 공격 주도",
+    "teamBInfo": "수비 집중 / 역습 패턴",
+    "recentForm": {
+      "teamA": [
+        "win",
+        "draw",
+        "win",
+        "win",
+        "draw"
+      ],
+      "teamB": [
+        "loss",
+        "draw",
+        "win",
+        "loss",
+        "draw"
+      ]
+    },
+    "recentFormDesc": {
+      "teamA": "[AI 자동 생성] Belgium은 최근 공격진의 유기적인 패스 워크가 살아나며 흐름이 좋습니다.",
+      "teamB": "[AI 자동 생성] Egypt은 상대적으로 수비에 치중하며 끈적한 경기를 펼치고 있습니다."
+    },
+    "tactics": {
+      "teamA": "[AI 전술 요약] 측면 윙어의 오버랩을 활용한 컷백 크로스 공격 집중.",
+      "teamB": "[AI 전술 요약] 중앙을 두껍게 한 5백 형성 및 선 수비 후 타겟맨 롱볼 카운터."
+    },
+    "keyMatchups": [
+      {
+        "playerA": "A팀 핵심 플레이어",
+        "teamA": "Belgium",
+        "playerB": "B팀 핵심 대인 마크맨",
+        "teamB": "Egypt",
+        "desc": "스피드와 힘이 충돌하는 이 지역에서 승패의 향방이 갈릴 것입니다."
+      }
+    ],
+    "verdict": {
+      "predictedScore": "예상 스코어: Belgium 1 - 0 우세",
+      "desc": "[AI 전망] 전반적인 데이터와 객관적 전력은 Belgium의 우세를 점치고 있으나, 단기전 특성상 이변의 가능성도 열려 있습니다."
+    }
+  },
+  "16": {
+    "matchupName": "Saudi Arabia vs Uruguay",
+    "stadiumInfo": "내일 예정 - 8번 경기장",
+    "winRate": {
+      "teamA": 64,
+      "draw": 20,
+      "teamB": 23
+    },
+    "teamAInfo": "상승세 / 공격 주도",
+    "teamBInfo": "수비 집중 / 역습 패턴",
+    "recentForm": {
+      "teamA": [
+        "win",
+        "draw",
+        "win",
+        "win",
+        "draw"
+      ],
+      "teamB": [
+        "loss",
+        "draw",
+        "win",
+        "loss",
+        "draw"
+      ]
+    },
+    "recentFormDesc": {
+      "teamA": "[AI 자동 생성] Saudi Arabia은 최근 공격진의 유기적인 패스 워크가 살아나며 흐름이 좋습니다.",
+      "teamB": "[AI 자동 생성] Uruguay은 상대적으로 수비에 치중하며 끈적한 경기를 펼치고 있습니다."
+    },
+    "tactics": {
+      "teamA": "[AI 전술 요약] 측면 윙어의 오버랩을 활용한 컷백 크로스 공격 집중.",
+      "teamB": "[AI 전술 요약] 중앙을 두껍게 한 5백 형성 및 선 수비 후 타겟맨 롱볼 카운터."
+    },
+    "keyMatchups": [
+      {
+        "playerA": "A팀 핵심 플레이어",
+        "teamA": "Saudi Arabia",
+        "playerB": "B팀 핵심 대인 마크맨",
+        "teamB": "Uruguay",
+        "desc": "스피드와 힘이 충돌하는 이 지역에서 승패의 향방이 갈릴 것입니다."
+      }
+    ],
+    "verdict": {
+      "predictedScore": "예상 스코어: Saudi Arabia 1 - 0 우세",
+      "desc": "[AI 전망] 전반적인 데이터와 객관적 전력은 Saudi Arabia의 우세를 점치고 있으나, 단기전 특성상 이변의 가능성도 열려 있습니다."
     }
   }
 }
