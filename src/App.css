@@ -329,6 +329,7 @@
 
 .match-card {
   position: relative;
+  z-index: 1;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
@@ -339,6 +340,10 @@
   overflow: visible;
   box-shadow: 0 12px 40px var(--glass-shadow);
   transition: var(--transition-smooth);
+}
+
+.match-card.dropdown-active {
+  z-index: 10;
 }
 
 .match-card:hover {

@@ -1006,7 +1006,7 @@ function App() {
               )}
               <div className="matches-grid">
               {filteredMatches.map(match => (
-                <div key={match.id} className={`match-card ${match.status === 'LIVE' ? 'live-card-glow' : ''}`}>
+                <div key={match.id} className={`match-card ${match.status === 'LIVE' ? 'live-card-glow' : ''} ${activeHighlightDropdownId === match.id ? 'dropdown-active' : ''}`}>
                   <div className="card-header">
                     <span 
                       className={`group-badge ${match.group.startsWith('Group') ? 'clickable-group-badge' : ''}`}
