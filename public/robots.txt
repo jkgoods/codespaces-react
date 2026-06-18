@@ -2,4 +2,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://jkgoods.github.io/codespaces-react/sitemap.xml
+Sitemap: https://wc2026.newtechtree.com/sitemap.xml
