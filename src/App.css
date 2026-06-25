@@ -1618,6 +1618,177 @@
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
+/* ==========================================================================
+   Wildcard 3위 순위표
+   ========================================================================== */
+.wildcard-section {
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, rgba(233, 196, 106, 0.06), rgba(0, 240, 255, 0.04));
+  border: 1px solid rgba(233, 196, 106, 0.25);
+  border-radius: 20px;
+  padding: 1.75rem;
+  box-shadow: 0 8px 32px rgba(233, 196, 106, 0.08);
+}
+
+.wildcard-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.wildcard-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.wildcard-badge-label {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--accent-gold);
+  background: rgba(233, 196, 106, 0.12);
+  border: 1px solid rgba(233, 196, 106, 0.3);
+  border-radius: 4px;
+  padding: 0.2rem 0.55rem;
+  width: fit-content;
+}
+
+.wildcard-title {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.wildcard-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.wildcard-cutline-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.wildcard-cutline-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.wildcard-cutline-pts {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--accent-gold);
+  line-height: 1;
+}
+
+.wildcard-table-wrap {
+  overflow-x: auto;
+}
+
+.wildcard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.wildcard-table th {
+  color: var(--text-muted);
+  font-weight: 700;
+  padding: 0.5rem 0.4rem;
+  border-bottom: 1px solid rgba(233, 196, 106, 0.2);
+  white-space: nowrap;
+}
+
+.wildcard-table td {
+  padding: 0.65rem 0.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  vertical-align: middle;
+}
+
+.wildcard-table-row:last-child td {
+  border-bottom: none;
+}
+
+.wildcard-table-row.wc-in td {
+  color: var(--text-primary);
+}
+
+.wildcard-table-row.wc-out td {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* 커트라인 구분선 */
+.wildcard-table-row.wc-cutline td {
+  border-bottom: 2px dashed rgba(233, 196, 106, 0.45) !important;
+  padding-bottom: 0.8rem;
+}
+
+.wc-rank-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.wc-rank-number.in {
+  background: rgba(233, 196, 106, 0.15);
+  color: var(--accent-gold);
+  border: 1px solid rgba(233, 196, 106, 0.35);
+}
+
+.wc-rank-number.out {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+}
+
+.wc-group-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 4px;
+  padding: 0.15rem 0.4rem;
+}
+
+.wc-pts-cell {
+  font-family: var(--font-title);
+  font-weight: 800;
+  color: var(--accent-gold);
+}
+
+.wc-group-badge.clickable {
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.wc-group-badge.clickable:hover {
+  background: rgba(0, 240, 255, 0.18);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+}
+
 /* Clickable Group Badges and Pulse highlighting */
 .group-badge.clickable-group-badge {
   cursor: pointer;
@@ -2108,6 +2279,50 @@
     align-items: center;
     font-size: 0.78rem;
     margin-top: 1.5rem;
+  }
+
+  /* Wildcard Section Mobile */
+  .wildcard-section {
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    border-radius: 16px;
+  }
+
+  .wildcard-section-header {
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .wildcard-title {
+    font-size: 1.15rem;
+  }
+
+  .wildcard-desc {
+    font-size: 0.78rem;
+  }
+
+  .wildcard-cutline-info {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .wildcard-cutline-pts {
+    font-size: 1.4rem;
+  }
+
+  .wildcard-table {
+    font-size: 0.75rem;
+  }
+
+  .wildcard-table th,
+  .wildcard-table td {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .team-cell-name {
+    max-width: 65px;
   }
 
   /* Stadium Spotlights Mobile */

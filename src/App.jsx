@@ -841,6 +841,106 @@ function App() {
                   <button onClick={() => window.location.reload()} style={{ padding: '0.3rem 0.8rem', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}>새로고침</button>
                 </div>
               )}
+              {/* 와일드카드 3위 순위표 */}
+              {(() => {
+                const thirdPlaceTeams = [...groupsData]
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map(group => {
+                    const sorted = [...group.teams].sort((a, b) => {
+                      const ptsDiff = parseInt(b.pts, 10) - parseInt(a.pts, 10);
+                      if (ptsDiff !== 0) return ptsDiff;
+                      const gdDiff = parseInt(b.gd, 10) - parseInt(a.gd, 10);
+                      if (gdDiff !== 0) return gdDiff;
+                      return parseInt(b.gf, 10) - parseInt(a.gf, 10);
+                    });
+                    const third = sorted[2];
+                    return third ? { ...third, groupName: group.name } : null;
+                  })
+                  .filter(Boolean)
+                  .sort((a, b) => {
+                    const ptsDiff = parseInt(b.pts, 10) - parseInt(a.pts, 10);
+                    if (ptsDiff !== 0) return ptsDiff;
+                    const gdDiff = parseInt(b.gd, 10) - parseInt(a.gd, 10);
+                    if (gdDiff !== 0) return gdDiff;
+                    return parseInt(b.gf, 10) - parseInt(a.gf, 10);
+                  });
+
+                const cutoffPts = thirdPlaceTeams[7] ? parseInt(thirdPlaceTeams[7].pts, 10) : null;
+
+                return (
+                  <div className="wildcard-section">
+                    <div className="wildcard-section-header">
+                      <div className="wildcard-title-wrap">
+                        <span className="wildcard-badge-label">WILD CARD</span>
+                        <h2 className="wildcard-title">실시간 3위 와일드카드 순위</h2>
+                        <p className="wildcard-desc">12개 조 3위 팀 중 승점·골득실·다득점 상위 8팀이 32강 진출</p>
+                      </div>
+                      <div className="wildcard-cutline-info">
+                        <span className="wildcard-cutline-label">현재 커트라인</span>
+                        <span className="wildcard-cutline-pts">{cutoffPts !== null ? `${cutoffPts}점` : '-'}</span>
+                      </div>
+                    </div>
+                    <div className="wildcard-table-wrap">
+                      <table className="wildcard-table">
+                        <thead>
+                          <tr>
+                            <th style={{ width: '7%' }}>순위</th>
+                            <th style={{ width: '7%' }}>조</th>
+                            <th style={{ width: '30%', textAlign: 'left' }}>팀</th>
+                            <th style={{ width: '9%' }}>경기</th>
+                            <th style={{ width: '8%' }}>승</th>
+                            <th style={{ width: '8%' }}>무</th>
+                            <th style={{ width: '8%' }}>패</th>
+                            <th style={{ width: '9%' }}>득실</th>
+                            <th style={{ width: '9%' }}>승점</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {thirdPlaceTeams.map((team, idx) => {
+                            const teamEnName = TEAM_ID_TO_EN[team.team_id] || "Unknown";
+                            const teamInfo = TEAM_MAPPING[teamEnName] || { name: teamEnName, flag: "🏳️" };
+                            const isIn = idx < 8;
+                            const isCutline = idx === 7;
+                            return (
+                              <tr key={team.team_id} className={`wildcard-table-row ${isIn ? 'wc-in' : 'wc-out'} ${isCutline ? 'wc-cutline' : ''}`}>
+                                <td><span className={`wc-rank-number ${isIn ? 'in' : 'out'}`}>{idx + 1}</span></td>
+                                <td>
+                                  <span
+                                    className="wc-group-badge clickable"
+                                    onClick={() => {
+                                      const element = document.getElementById(`group-card-${team.groupName}`);
+                                      if (element) {
+                                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                        element.classList.add('highlight-pulse');
+                                        setTimeout(() => element.classList.remove('highlight-pulse'), 2000);
+                                      }
+                                    }}
+                                  >
+                                    G{team.groupName}
+                                  </span>
+                                </td>
+                                <td>
+                                  <div className="team-cell">
+                                    <span className="team-cell-flag">{teamInfo.flag}</span>
+                                    <span className="team-cell-name" title={teamInfo.name}>{teamInfo.name}</span>
+                                  </div>
+                                </td>
+                                <td>{team.mp}</td>
+                                <td>{team.w}</td>
+                                <td>{team.d}</td>
+                                <td>{team.l}</td>
+                                <td>{parseInt(team.gd, 10) > 0 ? `+${team.gd}` : team.gd}</td>
+                                <td className="wc-pts-cell">{team.pts}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                );
+              })()}
+
               <div className="groups-grid">
                 {[...groupsData].sort((a, b) => a.name.localeCompare(b.name)).map(group => {
                   const sortedTeams = [...group.teams].sort((a, b) => {
