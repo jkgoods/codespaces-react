@@ -886,12 +886,13 @@ function App() {
                           <tr>
                             <th style={{ width: '7%' }}>순위</th>
                             <th style={{ width: '7%' }}>조</th>
-                            <th style={{ width: '30%', textAlign: 'left' }}>팀</th>
-                            <th style={{ width: '9%' }}>경기</th>
-                            <th style={{ width: '8%' }}>승</th>
-                            <th style={{ width: '8%' }}>무</th>
-                            <th style={{ width: '8%' }}>패</th>
-                            <th style={{ width: '9%' }}>득실</th>
+                            <th style={{ width: '27%', textAlign: 'left' }}>팀</th>
+                            <th style={{ width: '8%' }}>경기</th>
+                            <th style={{ width: '7%' }}>승</th>
+                            <th style={{ width: '7%' }}>무</th>
+                            <th style={{ width: '7%' }}>패</th>
+                            <th style={{ width: '8%' }}>득실</th>
+                            <th style={{ width: '8%' }}>득점</th>
                             <th style={{ width: '9%' }}>승점</th>
                           </tr>
                         </thead>
@@ -902,7 +903,7 @@ function App() {
                             const isIn = idx < 8;
                             const isCutline = idx === 7;
                             return (
-                              <tr key={team.team_id} className={`wildcard-table-row ${isIn ? 'wc-in' : 'wc-out'} ${isCutline ? 'wc-cutline' : ''}`}>
+                              <tr key={team.team_id} className={`wildcard-table-row ${isIn ? 'wc-in' : 'wc-out'} ${isCutline ? 'wc-cutline' : ''} ${parseInt(team.mp, 10) === 3 ? 'wc-completed' : ''}`}>
                                 <td><span className={`wc-rank-number ${isIn ? 'in' : 'out'}`}>{idx + 1}</span></td>
                                 <td>
                                   <span
@@ -930,6 +931,7 @@ function App() {
                                 <td>{team.d}</td>
                                 <td>{team.l}</td>
                                 <td>{parseInt(team.gd, 10) > 0 ? `+${team.gd}` : team.gd}</td>
+                                <td>{team.gf}</td>
                                 <td className="wc-pts-cell">{team.pts}</td>
                               </tr>
                             );

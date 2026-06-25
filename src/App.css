@@ -1739,6 +1739,11 @@
   padding-bottom: 0.8rem;
 }
 
+/* 3경기 모두 완료된 팀 행 */
+.wildcard-table-row.wc-completed td {
+  background: rgba(255, 255, 255, 0.04);
+}
+
 .wc-rank-number {
   display: inline-flex;
   align-items: center;
